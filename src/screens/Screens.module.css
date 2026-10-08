@@ -57,6 +57,140 @@
   margin: 0 auto 8px;
 }
 
+/* ---------- pick slots ---------- */
+
+.slotsPanel {
+  max-width: 980px;
+  margin: 0 auto 18px;
+  padding: 14px 16px 16px;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.placing {
+  border-color: var(--teal);
+  box-shadow: 0 0 30px rgba(63, 212, 200, 0.15);
+}
+
+.slotsHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.slotsTitle {
+  font-family: var(--font-display);
+  font-variant: small-caps;
+  font-size: 24px;
+  color: var(--gold-bright);
+}
+
+.slotsSub {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.slotsTotal {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.slotsTotal b {
+  margin-left: 4px;
+  font-size: 15px;
+  color: var(--text);
+}
+
+.slots {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.slot {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 7px;
+  min-height: 170px;
+  padding: 14px 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: var(--surface);
+  text-align: center;
+}
+
+.slot:disabled {
+  cursor: default;
+}
+
+.slotPlaceable:not(:disabled) {
+  cursor: pointer;
+}
+
+.slotPlaceable:not(:disabled):hover {
+  border-color: var(--teal);
+  background: color-mix(in srgb, var(--teal) 8%, var(--surface));
+}
+
+.best {
+  border-color: var(--teal);
+  box-shadow: inset 0 0 0 1px var(--teal);
+}
+
+.inTag {
+  position: absolute;
+  top: -9px;
+  padding: 0 7px;
+  border-radius: 2px;
+  background: var(--teal);
+  color: #03201f;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 17px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.slotRole {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.slotPlayer {
+  font-size: 12.5px;
+  color: var(--text-dim);
+}
+
+.slotPower {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.slotEmpty {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.replaces {
+  font-size: 11px;
+  color: var(--red);
+}
+
 @media (max-width: 920px) {
   .layout {
     grid-template-columns: 1fr;
@@ -64,5 +198,11 @@
 
   .side {
     position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .slots {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
