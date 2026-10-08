@@ -171,36 +171,3 @@ h3 {
 .btn-block {
   width: 100%;
 }
-
-/* ---------- timed reveals for fight and match playback ---------- */
-
-.reveal {
-  opacity: 0;
-  animation: reveal 0.4s ease forwards;
-  animation-delay: var(--d, 0s);
-}
-
-@keyframes reveal {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-.instant .reveal,
-.instant [data-timed] {
-  animation-delay: 0s !important;
-  animation-duration: 0.01s !important;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .reveal,
-  [data-timed] {
-    animation-delay: 0s !important;
-    animation-duration: 0.01s !important;
-  }
-}

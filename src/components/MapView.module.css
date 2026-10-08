@@ -12,23 +12,44 @@
   height: 100%;
 }
 
+/* ---------- edges: gone (default), ahead, open, walked ---------- */
+
 .edge {
+  stroke: var(--line);
+  stroke-width: 1.2;
+  stroke-dasharray: 2 6;
+  opacity: 0.5;
+}
+
+.edge.ahead {
   stroke: var(--line-strong);
-  stroke-width: 1.5;
-  stroke-dasharray: 3 5;
+  stroke-width: 1.6;
+  stroke-dasharray: 4 5;
+  opacity: 1;
 }
 
-.open {
+.edge.open {
   stroke: var(--teal);
-  stroke-dasharray: none;
-  stroke-width: 2;
+  stroke-width: 2.5;
+  stroke-dasharray: 7 5;
+  opacity: 1;
+  animation: flow 0.8s linear infinite;
 }
 
-.walked {
+.edge.walked {
   stroke: var(--gold);
+  stroke-width: 3;
   stroke-dasharray: none;
-  stroke-width: 2.5;
+  opacity: 1;
 }
+
+@keyframes flow {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+/* ---------- start ---------- */
 
 .start {
   position: absolute;
@@ -44,11 +65,17 @@
   font-size: 11px;
 }
 
-.here {
-  box-shadow: 0 0 0 4px rgba(200, 165, 92, 0.18);
+.startHere {
+  border-width: 2px;
+  animation: here 2s ease-in-out infinite;
 }
 
-/* ---------- nodes ---------- */
+.startDone {
+  background: var(--gold-deep);
+  color: var(--gold-bright);
+}
+
+/* ---------- nodes: here, visited, open, ahead, gone ---------- */
 
 .node {
   position: absolute;
@@ -65,7 +92,8 @@
   transition:
     transform 0.15s,
     box-shadow 0.15s,
-    border-color 0.15s;
+    border-color 0.15s,
+    opacity 0.2s;
 }
 
 .node:disabled {
@@ -93,38 +121,95 @@
   pointer-events: none;
 }
 
+/* You can step here next. */
 .node.open {
-  border-color: var(--teal);
+  border: 2px solid var(--teal);
   box-shadow:
-    0 0 0 4px rgba(63, 212, 200, 0.12),
-    0 0 18px rgba(63, 212, 200, 0.35);
+    0 0 0 4px rgba(63, 212, 200, 0.14),
+    0 0 18px rgba(63, 212, 200, 0.4);
   cursor: pointer;
+  transform: translate(-50%, -50%) scale(1.06);
   animation: pulse 1.8s ease-in-out infinite;
 }
 
 .node.open:hover {
-  transform: translate(-50%, -50%) scale(1.08);
+  transform: translate(-50%, -50%) scale(1.14);
 }
 
-.node.here,
-.node.visited {
-  border-color: var(--gold);
+.node.open .caption {
+  color: var(--teal-bright);
 }
 
+/* Where you stand. */
 .node.here {
-  box-shadow: 0 0 0 4px rgba(200, 165, 92, 0.2);
+  border: 2px solid var(--gold);
+  background: radial-gradient(circle, rgba(200, 165, 92, 0.28), var(--bg-deep) 72%);
+  animation: here 2s ease-in-out infinite;
 }
 
+/* Already walked. */
 .node.visited {
-  opacity: 0.55;
+  border-color: var(--gold-deep);
+  background: radial-gradient(circle, rgba(200, 165, 92, 0.16), var(--bg-deep) 72%);
 }
 
-.node.locked {
-  opacity: 0.75;
+.node.visited .fightCrest,
+.node.visited .plus,
+.node.here .fightCrest,
+.node.here .plus {
+  opacity: 0.45;
+}
+
+.node.visited .caption {
+  color: var(--gold);
+  opacity: 0.7;
+}
+
+/* Still reachable later. */
+.node.ahead {
+  opacity: 0.95;
+}
+
+/* Not reachable any more from where you stand. */
+.node.gone {
+  opacity: 0.22;
+  filter: grayscale(1);
+}
+
+.youTag {
+  position: absolute;
+  top: -21px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0 6px;
+  border-radius: 2px;
+  background: var(--gold);
+  color: #1c1406;
+  font-size: 9.5px;
+  font-weight: 800;
+  line-height: 15px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.check {
+  position: absolute;
+  right: -5px;
+  bottom: -3px;
+  display: grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: #1c1406;
+  font-size: 10px;
+  font-weight: 900;
 }
 
 .pick {
-  border-color: color-mix(in srgb, var(--teal) 55%, var(--line-strong));
+  border-color: color-mix(in srgb, var(--teal) 45%, var(--line-strong));
 }
 
 .plus {
@@ -135,7 +220,7 @@
 }
 
 .fight {
-  border-color: color-mix(in srgb, var(--gold) 60%, var(--line-strong));
+  border-color: color-mix(in srgb, var(--gold) 50%, var(--line-strong));
 }
 
 .fightCrest {
@@ -189,18 +274,91 @@
   box-shadow:
     0 0 0 5px rgba(229, 72, 94, 0.14),
     0 0 22px rgba(229, 72, 94, 0.4);
+  animation: pulseRed 1.8s ease-in-out infinite;
 }
 
 @keyframes pulse {
   50% {
     box-shadow:
-      0 0 0 7px rgba(63, 212, 200, 0.08),
-      0 0 26px rgba(63, 212, 200, 0.45);
+      0 0 0 8px rgba(63, 212, 200, 0.08),
+      0 0 28px rgba(63, 212, 200, 0.5);
   }
 }
 
+@keyframes pulseRed {
+  50% {
+    box-shadow:
+      0 0 0 8px rgba(229, 72, 94, 0.08),
+      0 0 28px rgba(229, 72, 94, 0.5);
+  }
+}
+
+@keyframes here {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px rgba(200, 165, 92, 0.2);
+  }
+  50% {
+    box-shadow:
+      0 0 0 7px rgba(200, 165, 92, 0.1),
+      0 0 20px rgba(200, 165, 92, 0.35);
+  }
+}
+
+/* ---------- legend ---------- */
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 18px;
+  margin: 4px 0 0;
+  padding: 10px 0 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--line-strong);
+  background: var(--bg-deep);
+}
+
+.swHere {
+  border-color: var(--gold);
+  box-shadow: 0 0 6px rgba(200, 165, 92, 0.6);
+}
+
+.swOpen {
+  border-color: var(--teal);
+  box-shadow: 0 0 6px rgba(63, 212, 200, 0.6);
+}
+
+.swVisited {
+  border-color: var(--gold-deep);
+  background: var(--gold);
+}
+
+.swGone {
+  opacity: 0.3;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .node.open {
+  .node.open,
+  .node.here,
+  .match.open,
+  .startHere,
+  .edge.open {
     animation: none;
   }
 }

@@ -10,22 +10,33 @@
 
 /* ---------- map day ---------- */
 
+/* Roster left, map centered, next opponent right. */
 .layout {
   display: grid;
-  grid-template-columns: minmax(290px, 340px) minmax(0, 1fr);
+  grid-template-columns: minmax(280px, 330px) minmax(0, 1fr) minmax(280px, 330px);
+  grid-template-areas: "team main scout";
   gap: 20px;
-  max-width: 1240px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: 20px 20px 64px;
 }
 
 .side {
+  grid-area: team;
+  position: sticky;
+  top: 76px;
+  align-self: start;
+}
+
+.scout {
+  grid-area: scout;
   position: sticky;
   top: 76px;
   align-self: start;
 }
 
 .main {
+  grid-area: main;
   min-width: 0;
 }
 
@@ -310,13 +321,28 @@
   font-weight: 700;
 }
 
+@media (max-width: 1200px) {
+  .layout {
+    grid-template-columns: minmax(280px, 330px) minmax(0, 1fr);
+    grid-template-areas:
+      "team main"
+      "scout main";
+    align-items: start;
+  }
+
+  .side,
+  .scout {
+    position: static;
+  }
+}
+
 @media (max-width: 920px) {
   .layout {
     grid-template-columns: 1fr;
-  }
-
-  .side {
-    position: static;
+    grid-template-areas:
+      "team"
+      "main"
+      "scout";
   }
 }
 

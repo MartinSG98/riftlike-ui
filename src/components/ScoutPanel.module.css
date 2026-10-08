@@ -1,15 +1,15 @@
 .panel {
-  margin-top: 18px;
-  padding: 14px 14px 12px;
+  padding: 14px 12px 12px;
 }
 
 .head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
 }
 
 .level {
+  margin-left: auto;
   font-size: 12px;
   font-weight: 700;
   color: var(--text-muted);

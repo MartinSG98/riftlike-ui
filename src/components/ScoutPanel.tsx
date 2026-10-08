@@ -1,9 +1,12 @@
+import { useState } from "react";
+
 import type { RunView } from "../api/types";
 import { cx, ROLES, signed } from "../lib/format";
 import { useTeam } from "../state/catalog";
 import { PlayerAvatar, PowerBox, TeamBadge } from "./Badges";
 import { ChampCrest } from "./ChampCrest";
 import { RoleIcon } from "./Icons";
+import { RosterModal } from "./RosterModal";
 import styles from "./ScoutPanel.module.css";
 
 /** The opponent waiting at the bottom of the map. */
@@ -11,12 +14,17 @@ export function ScoutPanel({ run }: { run: RunView }) {
   const opp = run.opponent!;
   const team = useTeam(opp.code);
   const diff = run.lineup.total - opp.lineup.total;
+  const [scout, setScout] = useState(false);
   return (
     <section className={cx("panel", styles.panel)}>
       <div className={styles.head}>
         <span className="eyebrow">Next opponent</span>
         <span className={styles.level}>Level {opp.level}</span>
+        <button type="button" className="btn btn-ghost btn-small" onClick={() => setScout(true)}>
+          Scout
+        </button>
       </div>
+      {scout && <RosterModal run={run} side="them" onClose={() => setScout(false)} />}
       <div className={styles.team}>
         <TeamBadge code={team.code} size="md" />
         <span>

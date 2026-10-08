@@ -1,7 +1,7 @@
 # 0003. CSS-only playback animations
 
 Date: 2026-10-08
-Status: Accepted
+Status: Superseded by [0005](0005-step-by-step-playback-on-a-timeline.md)
 
 ## Context
 

@@ -35,8 +35,12 @@ export function MapScreen({ run, act, busy }: { run: RunView; act: ActFn; busy: 
             </button>
           </div>
         )}
-        {run.opponent && <ScoutPanel run={run} />}
       </section>
+      {run.opponent && (
+        <aside className={styles.scout}>
+          <ScoutPanel run={run} />
+        </aside>
+      )}
     </main>
   );
 }

@@ -1,7 +1,7 @@
 # 0002. Crests instead of game art
 
 Date: 2026-10-08
-Status: Accepted
+Status: Accepted, partially superseded by [0004](0004-a-generated-emblem-per-champion.md) and [0006](0006-official-champion-art.md)
 
 ## Context
 
