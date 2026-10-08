@@ -116,6 +116,7 @@ export interface FightResult {
   ours: number;
   theirs: number;
   ours_parts: PowerPart[];
+  theirs_parts: PowerPart[];
   matchup: number;
   outcome: "win" | "loss" | "draw" | "forfeit";
   xp: XpGain[];
@@ -128,6 +129,7 @@ export interface LaneSide {
   player: string;
   power: number;
   counter: number;
+  parts: PowerPart[];
 }
 
 export interface ClashStep {

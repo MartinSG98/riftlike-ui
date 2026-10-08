@@ -1,27 +1,28 @@
 import { useEffect } from "react";
 
-import { cx, vars } from "../lib/format";
+import { cx } from "../lib/format";
 import styles from "./PlaybackBar.module.css";
 
 /**
- * The control under a fight or match playback. While it plays: a progress bar and a
- * Skip button. Once it is over: the Continue button. Space or Enter does whichever is
- * showing.
+ * The control under a fight or match playback. While it plays: progress, a speed toggle
+ * and Skip. Once it is over: the Continue button. Space or Enter does whichever is showing.
  */
 export function PlaybackBar({
-  duration,
+  progress,
   done,
   onSkip,
-  onDone,
+  speed,
+  onSpeed,
   continueLabel,
   onContinue,
   disabled,
   subdued,
 }: {
-  duration: number;
+  progress: number;
   done: boolean;
   onSkip: () => void;
-  onDone: () => void;
+  speed: number;
+  onSpeed: (speed: number) => void;
   continueLabel: string;
   onContinue: () => void;
   disabled?: boolean;
@@ -61,8 +62,17 @@ export function PlaybackBar({
     <div className={styles.bar} role="group" aria-label="Playback">
       <span className={styles.label}>Playing</span>
       <span className={styles.track}>
-        <span className={styles.fill} style={vars({ "--dur": `${duration}s` })} onAnimationEnd={onDone} data-timed />
+        <span className={styles.fill} style={{ width: `${progress * 100}%` }} />
       </span>
+      <button
+        type="button"
+        className={cx(styles.speed, speed === 2 && styles.speedOn)}
+        onClick={() => onSpeed(speed === 2 ? 1 : 2)}
+        aria-pressed={speed === 2}
+        title="Play twice as fast"
+      >
+        2×
+      </button>
       <button type="button" className={styles.skip} onClick={onSkip}>
         <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true">
           <path d="M2 3l6 5-6 5zM8 3l6 5-6 5z" fill="currentColor" />

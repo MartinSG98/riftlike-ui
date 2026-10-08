@@ -1,51 +1,57 @@
-import { useCallback, useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
-import type { ActFn, ClashStep, LaneSide, MatchResult, PendingMatch, RunView } from "../api/types";
+import type { ActFn, LaneSide, MatchResult, PendingMatch, PowerPart, RunView } from "../api/types";
 import { TeamBadge } from "../components/Badges";
 import { ChampCrest } from "../components/ChampCrest";
 import { RoleIcon } from "../components/Icons";
 import { PlaybackBar } from "../components/PlaybackBar";
 import { XpList } from "../components/XpList";
-import { cx, ROLE_NAMES, ROLES, vars } from "../lib/format";
+import { cx, ROLE_NAMES, ROLES, signed } from "../lib/format";
+import { baseOf, bonusesOf, laneStates, matchBeats, type LaneState, type MatchBeat, type Side } from "../lib/playback";
+import { readSpeed, useTimeline, writeSpeed } from "../lib/useTimeline";
 import { useTeam } from "../state/catalog";
 import styles from "./Fight.module.css";
-
-const START = 0.6; // seconds before the first clash
-const STEP = 0.75; // seconds between clashes
 
 export function MatchScreen({ run, act, busy }: { run: RunView; act: ActFn; busy: boolean }) {
   const r = (run.pending as PendingMatch).result;
   const us = useTeam(run.team);
   const them = useTeam(r.opponent);
-  const [instant, setInstant] = useState(false);
-  const [done, setDone] = useState(false);
-  const skip = useCallback(() => {
-    setInstant(true);
-    setDone(true);
-  }, []);
+  const [speed, setSpeed] = useState(readSpeed);
+  const beats = useMemo(() => matchBeats(r), [r]);
+  const { index, done, progress, skip } = useTimeline(beats, speed);
+  const states = laneStates(r, beats, done ? beats.length - 1 : index);
+  const beat = beats[index];
+  const showResult = done || beat.kind === "result";
 
-  // Every clash hits both lane cards at its moment in the playback, and the loser goes down
-  // a beat later, so the cards react in time with the log.
-  const fellOurs = new Map<number, number>();
-  const fellTheirs = new Map<number, number>();
-  const hitsOurs = new Map<number, Hit[]>();
-  const hitsTheirs = new Map<number, Hit[]>();
-  const addHit = (hits: Map<number, Hit[]>, lane: number, hit: Hit) => hits.set(lane, [...(hits.get(lane) ?? []), hit]);
-  r.steps.forEach((s, k) => {
-    const at = START + k * STEP;
-    const amount = Math.min(s.ours_power, s.theirs_power);
-    addHit(hitsOurs, s.ours, { at, amount });
-    addHit(hitsTheirs, s.theirs, { at, amount });
-    if (s.winner !== "us") fellOurs.set(s.ours, at + 0.3);
-    if (s.winner !== "them") fellTheirs.set(s.theirs, at + 0.3);
-  });
-  const resultAt = START + r.steps.length * STEP + 0.2;
+  const changeSpeed = (next: number) => {
+    setSpeed(next);
+    writeSpeed(next);
+  };
 
+  // Which lane cards are in focus on this beat.
+  const focus = (side: Side, lane: number): boolean => {
+    if (done) return false;
+    if (beat.kind === "base") return beat.lane === lane;
+    if (beat.kind === "bonus" || beat.kind === "counter") return beat.lane === lane && beat.side === side;
+    if (beat.kind === "clash") {
+      const s = r.steps[beat.step];
+      return side === "us" ? s.ours === lane : s.theirs === lane;
+    }
+    return false;
+  };
+  const clashHit = (side: Side, lane: number): number | null => {
+    if (done || beat.kind !== "clash") return null;
+    const s = r.steps[beat.step];
+    if ((side === "us" ? s.ours : s.theirs) !== lane) return null;
+    return Math.min(s.ours_power, s.theirs_power);
+  };
+
+  const lines = beats.slice(0, (done ? beats.length - 1 : index) + 1).map((b) => commentary(r, b));
   const continueLabel =
     r.next.kind === "day" ? "Next match day" : r.next.kind === "stage" ? "Continue" : "See how the run went";
 
   return (
-    <main className={cx("page", styles.screen, instant && "instant")}>
+    <main className={cx("page", styles.screen)}>
       <div className={cx("panel", styles.panel)}>
         <p className="eyebrow center">{r.label}</p>
         <div className={styles.vs}>
@@ -57,51 +63,38 @@ export function MatchScreen({ run, act, busy }: { run: RunView; act: ActFn; busy
             {them.name} <TeamBadge code={them.code} size="md" />
           </span>
         </div>
-        <p className={styles.explain}>
-          Lanes clash from top to bottom. The stronger side wins and carries what it has left into the next enemy.
-          Whoever has power left at the end takes the match.
-        </p>
 
         <div className={styles.lanes}>
           {ROLES.map((role, i) => (
-            <div key={role} className={styles.lane}>
-              <Side lane={r.ours[i]} side="us" fellAt={fellOurs.get(i)} hits={hitsOurs.get(i)} />
+            <div key={role} className={cx(styles.lane, (focus("us", i) || focus("them", i)) && styles.laneFocus)}>
+              <SideCard lane={r.ours[i]} side="us" state={states.us[i]} focus={focus("us", i)} hit={clashHit("us", i)} beat={index} />
               <span className={styles.laneRole} title={ROLE_NAMES[role]}>
                 <RoleIcon role={role} size={16} />
               </span>
-              <Side lane={r.theirs[i]} side="them" fellAt={fellTheirs.get(i)} hits={hitsTheirs.get(i)} />
+              <SideCard lane={r.theirs[i]} side="them" state={states.them[i]} focus={focus("them", i)} hit={clashHit("them", i)} beat={index} />
             </div>
           ))}
         </div>
 
-        <ol className={styles.steps}>
-          {r.steps.map((s, k) => (
-            <li
-              key={k}
-              className={cx(styles.step, s.winner === "us" ? styles.stepUs : s.winner === "them" ? styles.stepThem : undefined)}
-              style={vars({ "--d": `${START + k * STEP}s` })}
-              data-timed
-            >
-              {describe(r, s)}
-            </li>
-          ))}
-        </ol>
+        <Commentary lines={lines} />
 
-        <div className={cx(styles.verdict, !r.win && styles.loss, "reveal")} style={vars({ "--d": `${resultAt}s` })}>
-          {r.win ? "Victory" : "Defeat"}
-        </div>
-        <p className={cx(styles.sub, "reveal")} style={vars({ "--d": `${resultAt + 0.2}s` })}>
-          {r.win ? `Won with ${r.left} power to spare.` : `${them.name} won with ${r.left} power to spare.`}{" "}
-          <b>{r.next.label}</b>
-        </p>
-        <div className="reveal" style={vars({ "--d": `${resultAt + 0.4}s` })}>
-          <XpList gains={r.xp} />
-        </div>
+        {showResult && (
+          <div className={styles.result}>
+            <div className={cx(styles.verdict, !r.win && styles.loss)}>{r.win ? "Victory" : "Defeat"}</div>
+            <p className={styles.sub}>
+              {r.win ? `Won with ${r.left} power to spare.` : `${them.name} won with ${r.left} power to spare.`}{" "}
+              <b>{r.next.label}</b>
+            </p>
+            <XpList gains={r.xp} />
+          </div>
+        )}
+
         <PlaybackBar
-          duration={resultAt + 0.7}
+          progress={progress}
           done={done}
           onSkip={skip}
-          onDone={() => setDone(true)}
+          speed={speed}
+          onSpeed={changeSpeed}
           continueLabel={continueLabel}
           onContinue={() => act({ type: "continue" })}
           disabled={busy}
@@ -112,48 +105,78 @@ export function MatchScreen({ run, act, busy }: { run: RunView; act: ActFn; busy
   );
 }
 
-interface Hit {
-  at: number;
-  amount: number;
-}
-
-function Side({
+function SideCard({
   lane,
   side,
-  fellAt,
-  hits = [],
+  state,
+  focus,
+  hit,
+  beat,
 }: {
   lane: LaneSide;
-  side: "us" | "them";
-  fellAt?: number;
-  hits?: Hit[];
+  side: Side;
+  state: LaneState;
+  focus: boolean;
+  hit: number | null;
+  beat: number;
 }) {
+  const shown = state.remaining ?? state.value;
   return (
-    <div
-      className={cx(styles.side, styles[side], fellAt !== undefined && styles.fallen)}
-      style={fellAt !== undefined ? vars({ "--d": `${fellAt}s` }) : undefined}
-      data-timed
-    >
+    <div className={cx(styles.side, styles[side], focus && styles.sideFocus, state.fallen && styles.fallen)}>
       <ChampCrest champ={lane.champ} size="sm" level={lane.level} />
       <span className={styles.sideText}>
         <b>{lane.champ ?? `No ${ROLE_NAMES[lane.role]}`}</b>
         <small>{lane.player}</small>
+        {(state.chips.length > 0 || state.counter > 0) && (
+          <span className={styles.chips}>
+            {state.chips.map((p, i) => (
+              <Chip key={i} part={p} />
+            ))}
+            {state.counter > 0 && <span className={cx(styles.chip, styles.chipCounter)}>Counter +{state.counter}</span>}
+          </span>
+        )}
       </span>
       <span className={styles.sidePower}>
-        {lane.power}
-        {lane.counter > 0 && <small>counter +{lane.counter}</small>}
-      </span>
-      {hits.map((hit, i) => (
-        <span key={i} aria-hidden="true">
-          <span className={styles.flash} style={vars({ "--d": `${hit.at}s` })} data-timed />
-          {hit.amount > 0 && (
-            <span className={styles.hit} style={vars({ "--d": `${hit.at}s` })} data-timed>
-              −{hit.amount}
-            </span>
-          )}
+        {/* Keyed on the value so every change replays the bump. */}
+        <span key={`${shown}-${state.remaining !== null}`} className={cx(styles.number, shown !== null && styles.bump)}>
+          {shown ?? "–"}
         </span>
-      ))}
+        {state.remaining !== null && !state.fallen && <small>left</small>}
+      </span>
+      {hit !== null && (
+        <span key={beat} aria-hidden="true">
+          <span className={styles.flashNow} />
+          {hit > 0 && <span className={styles.hitNow}>−{hit}</span>}
+        </span>
+      )}
     </div>
+  );
+}
+
+function Chip({ part }: { part: PowerPart }) {
+  return (
+    <span className={cx(styles.chip, part.value < 0 && styles.chipNeg)}>
+      {part.label} {signed(part.value)}
+    </span>
+  );
+}
+
+function Commentary({ lines }: { lines: ReactNode[] }) {
+  const box = useRef<HTMLOListElement>(null);
+  // Jump, not smooth scroll: a new line can arrive before a smooth scroll finishes and cut it short.
+  useLayoutEffect(() => {
+    if (box.current) box.current.scrollTop = box.current.scrollHeight;
+  }, [lines.length]);
+  return (
+    <ol className={styles.commentary} ref={box} aria-live="polite">
+      {lines.map((line, i) =>
+        line ? (
+          <li key={i} className={cx(i === lines.length - 1 && styles.lineNow)}>
+            {line}
+          </li>
+        ) : null,
+      )}
+    </ol>
   );
 }
 
@@ -161,26 +184,73 @@ function name(lane: LaneSide): string {
   return lane.champ ?? `empty ${ROLE_NAMES[lane.role]}`;
 }
 
-function describe(r: MatchResult, s: ClashStep) {
-  const ours = name(r.ours[s.ours]);
-  const theirs = name(r.theirs[s.theirs]);
-  if (s.winner === "us") {
-    return (
-      <>
-        <b>{ours}</b> ({s.ours_power}) beats {theirs} ({s.theirs_power}), <b>{s.left}</b> left
-      </>
-    );
+/** One line of play-by-play for a beat. */
+function commentary(r: MatchResult, beat: MatchBeat): ReactNode {
+  switch (beat.kind) {
+    case "intro":
+      return (
+        <>
+          Every lane builds its power first: <b>base</b>, then <b>bonuses</b>, then the <b>lane matchup</b>. Then the
+          lanes clash from top to bottom, and each winner carries what it has left into the next enemy.
+        </>
+      );
+    case "base": {
+      const a = r.ours[beat.lane];
+      const b = r.theirs[beat.lane];
+      return (
+        <>
+          <span className={styles.tag}>{ROLE_NAMES[a.role]}</span>
+          <b className="pos">{name(a)}</b> starts at <b>{baseOf(a)}</b>
+          {a.level ? ` (level ${a.level})` : ""}, <b className="neg">{name(b)}</b> at <b>{baseOf(b)}</b>
+          {b.level ? ` (level ${b.level})` : ""}.
+        </>
+      );
+    }
+    case "bonus": {
+      const lane = beat.side === "us" ? r.ours[beat.lane] : r.theirs[beat.lane];
+      const bonuses = bonusesOf(lane);
+      const total = baseOf(lane) + bonuses.reduce((sum, p) => sum + p.value, 0);
+      return (
+        <>
+          <b className={beat.side === "us" ? "pos" : "neg"}>{name(lane)}</b>:{" "}
+          {bonuses.map((p) => `${p.label} ${signed(p.value)}`).join(", ")}, now <b>{total}</b>.
+        </>
+      );
+    }
+    case "counter": {
+      const lane = beat.side === "us" ? r.ours[beat.lane] : r.theirs[beat.lane];
+      const other = beat.side === "us" ? r.theirs[beat.lane] : r.ours[beat.lane];
+      return (
+        <>
+          <b className={beat.side === "us" ? "pos" : "neg"}>{name(lane)}</b> counters {name(other)} in lane:{" "}
+          <b>+{lane.counter}</b>, now <b>{lane.power}</b>.
+        </>
+      );
+    }
+    case "clash": {
+      const s = r.steps[beat.step];
+      const a = name(r.ours[s.ours]);
+      const b = name(r.theirs[s.theirs]);
+      const next = r.steps[beat.step + 1];
+      let onward = "";
+      if (next && s.winner === "us") onward = `, and moves on to ${name(r.theirs[next.theirs])}`;
+      if (next && s.winner === "them") onward = `, and moves on to ${name(r.ours[next.ours])}`;
+      return (
+        <>
+          <span className={styles.tag}>Clash</span>
+          <b className="pos">{a}</b> {s.ours_power} vs {s.theirs_power} <b className="neg">{b}</b>:{" "}
+          {s.winner === "tie" ? (
+            "dead even, both are out."
+          ) : (
+            <>
+              <b className={s.winner === "us" ? "pos" : "neg"}>{s.winner === "us" ? a : b}</b> wins with{" "}
+              <b>{s.left}</b> left{onward}.
+            </>
+          )}
+        </>
+      );
+    }
+    default:
+      return null;
   }
-  if (s.winner === "them") {
-    return (
-      <>
-        <b>{theirs}</b> ({s.theirs_power}) beats {ours} ({s.ours_power}), <b>{s.left}</b> left
-      </>
-    );
-  }
-  return (
-    <>
-      {ours} and {theirs} trade evenly at {s.ours_power}
-    </>
-  );
 }

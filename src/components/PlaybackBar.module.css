@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  max-width: 440px;
+  max-width: 480px;
   margin: 26px auto 0;
   padding: 8px 8px 8px 18px;
   border: 1px solid var(--line-strong);
@@ -31,13 +31,29 @@
   width: 0;
   height: 100%;
   background: linear-gradient(90deg, var(--teal-deep), var(--teal));
-  animation: fill var(--dur) linear forwards;
+  transition: width 0.4s ease;
 }
 
-@keyframes fill {
-  to {
-    width: 100%;
-  }
+.speed {
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.speed:hover {
+  color: var(--text);
+}
+
+.speedOn {
+  border-color: var(--teal);
+  background: var(--teal-deep);
+  color: var(--teal-bright);
 }
 
 .skip {
