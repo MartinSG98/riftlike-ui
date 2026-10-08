@@ -27,6 +27,7 @@ export function ChampCard({
   disabled?: boolean;
 }) {
   const info = useCatalog().champions[offer.champ];
+  const teamDelta = offer.projections[offer.best_role].delta;
   return (
     <article
       className={cx(styles.card, active && styles.active)}
@@ -58,6 +59,22 @@ export function ChampCard({
             ))}
           </dd>
         </div>
+        {mode === "pick" && (
+          <>
+            <div>
+              <dt>
+                Power as {ROLE_NAMES[offer.best_role]}, level {offer.level}
+              </dt>
+              <dd>
+                <PowerBox value={offer.projections[offer.best_role].power} />
+              </dd>
+            </div>
+            <div>
+              <dt>Team power</dt>
+              <dd className={teamDelta > 0 ? "pos" : teamDelta < 0 ? "neg" : "muted"}>{signed(teamDelta)}</dd>
+            </div>
+          </>
+        )}
         {mode === "first" && role && (
           <>
             <div>
