@@ -1,0 +1,193 @@
+/* ---------- team badge ---------- */
+
+.team {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  border: 1.5px solid var(--tc);
+  border-radius: 6px 6px 12px 12px;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--tc) 26%, transparent), transparent 80%),
+    var(--bg-deep);
+  color: var(--tc);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.sm {
+  width: 30px;
+  height: 30px;
+  font-size: 10px;
+}
+
+.md {
+  width: 42px;
+  height: 42px;
+  font-size: 13px;
+}
+
+.lg {
+  width: 58px;
+  height: 58px;
+  font-size: 17px;
+}
+
+.xl {
+  width: 84px;
+  height: 84px;
+  font-size: 24px;
+  border-width: 2px;
+}
+
+.long.sm {
+  font-size: 8px;
+}
+
+.long.md {
+  font-size: 10.5px;
+}
+
+.long.lg {
+  font-size: 13px;
+}
+
+.long.xl {
+  font-size: 19px;
+}
+
+/* ---------- player avatar ---------- */
+
+.player {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, var(--surface-3), var(--bg-deep));
+  border: 1px solid var(--line-strong);
+  color: var(--text-dim);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.sigBonus {
+  position: absolute;
+  left: -4px;
+  bottom: -5px;
+  padding: 0 3px;
+  border-radius: 3px;
+  background: var(--gold);
+  color: #1c1406;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 14px;
+}
+
+/* ---------- focus chip ---------- */
+
+.focus {
+  display: inline-block;
+  padding: 1px 7px;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  font-size: 11px;
+  font-weight: 700;
+  background: color-mix(in srgb, currentColor 10%, transparent);
+}
+
+.early {
+  color: var(--focus-early);
+}
+
+.mid {
+  color: var(--focus-mid);
+}
+
+.late {
+  color: var(--focus-late);
+}
+
+/* ---------- power box ---------- */
+
+.power {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  min-width: 36px;
+  height: 28px;
+  padding: 0 6px;
+  border: 1px solid var(--line-strong);
+  border-radius: 2px;
+  background: var(--bg-deep);
+  font-weight: 800;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  outline: none;
+}
+
+.them {
+  border-right: 3px solid var(--red);
+}
+
+.us {
+  border-color: color-mix(in srgb, var(--gold) 45%, var(--line-strong));
+}
+
+.sm {
+  min-width: 30px;
+  height: 22px;
+  font-size: 12.5px;
+}
+
+.lg {
+  min-width: 64px;
+  height: 52px;
+  font-size: 30px;
+}
+
+.tip {
+  position: absolute;
+  z-index: 30;
+  right: 0;
+  bottom: calc(100% + 8px);
+  display: none;
+  min-width: 190px;
+  padding: 8px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--bg-deep);
+  box-shadow: var(--shadow);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.power:hover .tip,
+.power:focus .tip {
+  display: grid;
+  gap: 3px;
+}
+
+.tipRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  color: var(--text-dim);
+}
+
+.tipRow b {
+  color: var(--text);
+}
+
+.tipTotal {
+  margin-top: 3px;
+  padding-top: 5px;
+  border-top: 1px solid var(--line);
+  color: var(--text);
+}
