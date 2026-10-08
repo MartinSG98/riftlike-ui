@@ -6,6 +6,7 @@ import { useTeam } from "../state/catalog";
 import { PlayerAvatar, PowerBox, TeamBadge } from "./Badges";
 import { ChampCrest } from "./ChampCrest";
 import { RoleIcon } from "./Icons";
+import { RosterModal } from "./RosterModal";
 import styles from "./TeamPanel.module.css";
 
 /** The roster sidebar. Drag a row onto another, or click two rows, to swap roles. */
@@ -13,6 +14,7 @@ export function TeamPanel({ run, act, busy }: { run: RunView; act: ActFn; busy: 
   const team = useTeam(run.team);
   const [selected, setSelected] = useState<Role | null>(null);
   const [over, setOver] = useState<Role | null>(null);
+  const [roster, setRoster] = useState(false);
   const { lineup } = run;
 
   const swap = (a: Role, b: Role) => {
@@ -36,7 +38,11 @@ export function TeamPanel({ run, act, busy }: { run: RunView; act: ActFn; busy: 
         <span className={styles.total}>
           Power <b>{lineup.total}</b>
         </span>
+        <button type="button" className="btn btn-ghost btn-small" onClick={() => setRoster(true)}>
+          Roster
+        </button>
       </div>
+      {roster && <RosterModal run={run} side="us" onClose={() => setRoster(false)} />}
       <div className={styles.team}>
         <TeamBadge code={team.code} size="md" />
         <span>

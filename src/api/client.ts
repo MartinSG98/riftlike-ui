@@ -1,4 +1,4 @@
-import type { Action, Catalog, RunSummary, RunView } from "./types";
+import type { Action, Catalog, Matchups, Role, RunSummary, RunView } from "./types";
 
 const BASE = import.meta.env.VITE_API_URL ?? "http://127.0.0.1:8010";
 
@@ -37,6 +37,9 @@ function json(method: string, body: unknown): RequestInit {
 
 export const api = {
   catalog: () => request<Catalog>("/api/catalog"),
+
+  matchups: (champ: string, role: Role) =>
+    request<Matchups>(`/api/matchups/${encodeURIComponent(champ)}?role=${role}`),
 
   recentRuns: (limit = 6) => request<RunSummary[]>(`/api/runs?limit=${limit}`),
 

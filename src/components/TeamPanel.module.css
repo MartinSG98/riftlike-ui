@@ -5,11 +5,12 @@
 .head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
   padding: 0 4px;
 }
 
 .total {
+  margin-left: auto;
   font-size: 12px;
   color: var(--text-muted);
 }

@@ -1,23 +1,10 @@
-import { useEffect } from "react";
-
 import styles from "./HowToPlay.module.css";
+import { Modal } from "./Modal";
 
 export function HowToPlay({ onClose }: { onClose: () => void }) {
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
-
   return (
-    <div className={styles.backdrop} onClick={onClose}>
-      <div
-        className={styles.modal}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="how-title"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <Modal labelledBy="how-title" onClose={onClose}>
+      <div className={styles.body}>
         <div className={styles.head}>
           <h2 id="how-title" className="display">
             How it works
@@ -57,7 +44,8 @@ export function HowToPlay({ onClose }: { onClose: () => void }) {
         <p>
           <b>Matches.</b> Lanes clash from top to bottom, and a champion that counters its lane opponent gets a small
           bonus. The stronger side wins the clash and carries what it has left into the next enemy. Whoever has power
-          left at the end wins, so the sum of your five champions is what counts. An empty role is worth nothing.
+          left at the end wins, so the sum of your five champions is what counts. An empty role is worth nothing. The
+          Roster and Scout buttons show every champion's counters and who counters them.
         </p>
         <p>
           <b>Opponents.</b> Every opponent fields its Worlds 2026 roster. Early on they play what they like. Deeper in
@@ -67,6 +55,6 @@ export function HowToPlay({ onClose }: { onClose: () => void }) {
           Signature lists, duo synergies and lane matchups are hand-tuned approximations, not live statistics.
         </p>
       </div>
-    </div>
+    </Modal>
   );
 }

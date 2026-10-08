@@ -32,6 +32,18 @@ export interface Catalog {
   leagues: LeagueInfo[];
 }
 
+export interface MatchupEntry {
+  champ: string;
+  value: number;
+}
+
+export interface Matchups {
+  champ: string;
+  role: Role;
+  counters: MatchupEntry[];
+  countered_by: MatchupEntry[];
+}
+
 export interface Unit {
   champ: string;
   level: number;

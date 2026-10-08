@@ -5,10 +5,11 @@
 .head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
 }
 
 .level {
+  margin-left: auto;
   font-size: 12px;
   font-weight: 700;
   color: var(--text-muted);
