@@ -35,6 +35,7 @@ export interface Catalog {
 export interface MatchupEntry {
   champ: string;
   value: number;
+  note: string; // why the winning side of the matchup has the edge
 }
 
 export interface Matchups {
@@ -126,6 +127,7 @@ export interface FightResult {
   ours_parts: PowerPart[];
   theirs_parts: PowerPart[];
   matchup: number;
+  matchup_note: string;
   outcome: "win" | "loss" | "draw" | "forfeit";
   xp: XpGain[];
 }
@@ -137,6 +139,7 @@ export interface LaneSide {
   player: string;
   power: number;
   counter: number;
+  counter_note: string;
   parts: PowerPart[];
 }
 

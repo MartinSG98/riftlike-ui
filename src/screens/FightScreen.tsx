@@ -235,11 +235,13 @@ function commentary(r: FightResult, beat: Beat, ourBase: number, theirBase: numb
     case "counter":
       return r.matchup > 0 ? (
         <>
-          <b className="pos">{ours}</b> counters {r.enemy.champ}: <b>+{r.matchup}</b>, now <b>{r.ours}</b>.
+          <b className="pos">{ours}</b> counters {r.enemy.champ}
+          {r.matchup_note ? ` (${r.matchup_note})` : ""}: <b>+{r.matchup}</b>, now <b>{r.ours}</b>.
         </>
       ) : (
         <>
-          <b className="neg">{r.enemy.champ}</b> counters {ours}: <b>+{-r.matchup}</b>, now <b>{r.theirs}</b>.
+          <b className="neg">{r.enemy.champ}</b> counters {ours}
+          {r.matchup_note ? ` (${r.matchup_note})` : ""}: <b>+{-r.matchup}</b>, now <b>{r.theirs}</b>.
         </>
       );
     case "clash":

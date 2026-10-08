@@ -46,8 +46,9 @@ export function HowToPlay({ onClose }: { onClose: () => void }) {
           on every champion.
         </p>
         <p>
-          <b>Matches.</b> Lanes clash from top to bottom, and a champion that counters its lane opponent gets a small
-          bonus. The stronger side wins the clash and carries what it has left into the next enemy. Whoever has power
+          <b>Matches.</b> Lanes clash from top to bottom, and a champion that counters its lane opponent gets up to
+          +5 on top of its bonuses: early champions beat late ones in lane, fighters beat tanks, assassins beat mages,
+          and ranged beats melee. The stronger side wins the clash and carries what it has left into the next enemy. Whoever has power
           left at the end wins, so the sum of your five champions is what counts. An empty role is worth nothing. The
           Roster and Scout buttons show every champion's counters and who counters them.
         </p>

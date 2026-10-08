@@ -222,8 +222,8 @@ function commentary(r: MatchResult, beat: MatchBeat): ReactNode {
       const other = beat.side === "us" ? r.theirs[beat.lane] : r.ours[beat.lane];
       return (
         <>
-          <b className={beat.side === "us" ? "pos" : "neg"}>{name(lane)}</b> counters {name(other)} in lane:{" "}
-          <b>+{lane.counter}</b>, now <b>{lane.power}</b>.
+          <b className={beat.side === "us" ? "pos" : "neg"}>{name(lane)}</b> counters {name(other)} in lane
+          {lane.counter_note ? ` (${lane.counter_note})` : ""}: <b>+{lane.counter}</b>, now <b>{lane.power}</b>.
         </>
       );
     }

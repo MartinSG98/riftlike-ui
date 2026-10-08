@@ -312,6 +312,20 @@
 
 .matchupName {
   flex: 1;
+  display: grid;
+  line-height: 1.25;
+}
+
+.matchupName small {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.rivalNote {
+  flex-basis: 100%;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: right;
 }
 
 .highlight {
