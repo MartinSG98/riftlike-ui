@@ -29,6 +29,27 @@ export function MapView({ run, act, busy }: { run: RunView; act: ActFn; busy: bo
     return { x: n.x * 100, y: TOP + (n.row + 1) * ROW_H };
   };
 
+  // Everything still reachable later: the open nodes and whatever lies below them.
+  const ahead = new Set<string>();
+  const queue = [...run.reachable];
+  while (queue.length) {
+    const id = queue.shift()!;
+    if (ahead.has(id) || id === "match") continue;
+    ahead.add(id);
+    queue.push(...(byId.get(id)?.children ?? []));
+  }
+
+  const stateOf = (id: string): NodeState =>
+    id === map.current
+      ? "here"
+      : visited.has(id)
+        ? "visited"
+        : reach.has(id)
+          ? "open"
+          : ahead.has(id)
+            ? "ahead"
+            : "gone";
+
   const walked = new Set(map.path.slice(1).map((id, i) => `${map.path[i]}>${id}`));
   const edges: [string, string][] = [];
   for (const n of map.nodes) {
@@ -37,18 +58,26 @@ export function MapView({ run, act, busy }: { run: RunView; act: ActFn; busy: bo
     for (const c of n.children) edges.push([n.id, c]);
   }
 
+  const edgeState = (a: string, b: string) => {
+    if (walked.has(`${a}>${b}`)) return styles.walked;
+    if (a === map.current && reach.has(b)) return styles.open;
+    if (ahead.has(a) && (ahead.has(b) || b === "match")) return styles.ahead;
+    return undefined;
+  };
+
   const enter = (id: string) => {
     if (!busy && reach.has(id)) act({ type: "enter", node: id });
   };
 
   return (
+    <>
     <div className={styles.map} style={{ height }}>
       <svg className={styles.edges} viewBox={`0 0 100 ${height}`} preserveAspectRatio="none" aria-hidden="true">
         {edges.map(([a, b]) => {
           const p = pos(a);
           const q = pos(b);
           const key = `${a}>${b}`;
-          const state = walked.has(key) ? styles.walked : a === map.current && reach.has(b) ? styles.open : undefined;
+          const state = edgeState(a, b);
           return (
             <line
               key={key}
@@ -63,25 +92,21 @@ export function MapView({ run, act, busy }: { run: RunView; act: ActFn; busy: bo
         })}
       </svg>
 
-      <span className={cx(styles.start, map.current === "start" && styles.here)} style={place(pos("start"))}>
-        ◆
+      <span
+        className={cx(styles.start, map.current === "start" ? styles.startHere : styles.startDone)}
+        style={place(pos("start"))}
+      >
+        ◆{map.current === "start" && <span className={styles.youTag}>You</span>}
       </span>
 
       {map.nodes.map((n) => (
-        <Node
-          key={n.id}
-          node={n}
-          run={run}
-          at={pos(n.id)}
-          state={n.id === map.current ? "here" : visited.has(n.id) ? "visited" : reach.has(n.id) ? "open" : "locked"}
-          onEnter={() => enter(n.id)}
-        />
+        <Node key={n.id} node={n} run={run} at={pos(n.id)} state={stateOf(n.id)} onEnter={() => enter(n.id)} />
       ))}
 
       {run.opponent && (
         <button
           type="button"
-          className={cx(styles.node, styles.match, reach.has("match") && styles.open)}
+          className={cx(styles.node, styles.match, reach.has("match") ? styles.open : styles.ahead)}
           style={place(pos("match"))}
           onClick={() => enter("match")}
           disabled={!reach.has("match") || busy}
@@ -93,8 +118,18 @@ export function MapView({ run, act, busy }: { run: RunView; act: ActFn; busy: bo
         </button>
       )}
     </div>
+    <ul className={styles.legend} aria-label="Map legend">
+      <li><span className={cx(styles.swatch, styles.swHere)} /> You are here</li>
+      <li><span className={cx(styles.swatch, styles.swOpen)} /> Can step on next</li>
+      <li><span className={cx(styles.swatch, styles.swVisited)} /> Visited</li>
+      <li><span className={cx(styles.swatch, styles.swAhead)} /> Further ahead</li>
+      <li><span className={cx(styles.swatch, styles.swGone)} /> Out of reach</li>
+    </ul>
+    </>
   );
 }
+
+type NodeState = "here" | "visited" | "open" | "ahead" | "gone";
 
 function place(p: Point) {
   return { left: `${p.x}%`, top: p.y };
@@ -110,7 +145,7 @@ function Node({
   node: MapNode;
   run: RunView;
   at: Point;
-  state: "here" | "visited" | "open" | "locked";
+  state: NodeState;
   onEnter: () => void;
 }) {
   const clickable = state === "open";
@@ -120,6 +155,12 @@ function Node({
     onClick: onEnter,
     disabled: !clickable,
   };
+  const marks = (
+    <>
+      {state === "here" && <span className={styles.youTag}>You</span>}
+      {state === "visited" && <span className={styles.check}>✓</span>}
+    </>
+  );
 
   if (node.type === "pick") {
     return (
@@ -130,6 +171,7 @@ function Node({
         data-tip="Pick a champion: three offers, take one into any role or skip"
       >
         <span className={styles.plus}>+</span>
+        {marks}
       </button>
     );
   }
@@ -142,12 +184,13 @@ function Node({
     : `${ROLE_NAMES[role]} 1v1 vs ${enemy.champ}. You have no ${ROLE_NAMES[role]} champion, so this is a forfeit`;
   return (
     <button {...common} className={cx(styles.node, styles.fight, styles[state])} aria-label={tip} data-tip={tip}>
-      <ChampCrest champ={enemy.champ} size="md" dim={state === "locked"} className={styles.fightCrest} />
-      <span className={cx(styles.badge, styles.enemyBadge)}>{node.power}</span>
+      <ChampCrest champ={enemy.champ} size="md" dim={state === "gone"} className={styles.fightCrest} />
+      {state !== "visited" && state !== "here" && <span className={cx(styles.badge, styles.enemyBadge)}>{node.power}</span>}
       <span className={styles.caption}>
         <RoleIcon role={role} size={11} /> {ROLE_NAMES[role]} 1v1
-        {!ours && <span className="neg"> ✕</span>}
+        {!ours && state !== "visited" && state !== "here" && <span className="neg"> ✕</span>}
       </span>
+      {marks}
     </button>
   );
 }
