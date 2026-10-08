@@ -17,41 +17,6 @@ export function RoleIcon({ role, size = 14, className }: { role: Role; size?: nu
   );
 }
 
-/** A simple emblem per champion class, drawn behind crests and card banners. */
-export function ClassSigil({ cls, className }: { cls: string; className?: string }) {
-  const stroke = { fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round" as const };
-  let shape;
-  switch (cls) {
-    case "Fighter":
-      shape = <path d="M5 5l14 14M19 5 5 19M7.5 15.5l1 1M16.5 15.5l-1 1" {...stroke} />;
-      break;
-    case "Mage":
-      shape = <path d="M12 2l2.3 7.7L22 12l-7.7 2.3L12 22l-2.3-7.7L2 12l7.7-2.3z" fill="currentColor" />;
-      break;
-    case "Assassin":
-      shape = <path d="M12 2l2.6 12.5H9.4zM7 15.5h10v2H7zm4 2h2V22h-2z" fill="currentColor" />;
-      break;
-    case "Tank":
-      shape = <path d="M12 2l8.5 3.2v6.4c0 5-3.6 8.8-8.5 10.4-4.9-1.6-8.5-5.4-8.5-10.4V5.2z" fill="currentColor" />;
-      break;
-    case "Marksman":
-      shape = (
-        <g {...stroke}>
-          <circle cx="12" cy="12" r="6.5" />
-          <path d="M12 2v5M12 17v5M2 12h5M17 12h5" />
-        </g>
-      );
-      break;
-    default:
-      shape = <path d="M12 2c4.2 4.8 7 8.6 7 12.2a7 7 0 0 1-14 0C5 10.6 7.8 6.8 12 2z" fill="currentColor" />;
-  }
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
-      {shape}
-    </svg>
-  );
-}
-
 export function TrophyIcon({ size = 16, className }: { size?: number; className?: string }) {
   return (
     <svg viewBox="0 0 24 24" width={size} height={size} className={className} aria-hidden="true">
