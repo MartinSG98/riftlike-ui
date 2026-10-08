@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 import type { ActFn, ClashStep, LaneSide, MatchResult, PendingMatch, RunView } from "../api/types";
 import { TeamBadge } from "../components/Badges";
 import { ChampCrest } from "../components/ChampCrest";
 import { RoleIcon } from "../components/Icons";
+import { PlaybackBar } from "../components/PlaybackBar";
 import { XpList } from "../components/XpList";
 import { cx, ROLE_NAMES, ROLES, vars } from "../lib/format";
 import { useTeam } from "../state/catalog";
@@ -17,6 +18,11 @@ export function MatchScreen({ run, act, busy }: { run: RunView; act: ActFn; busy
   const us = useTeam(run.team);
   const them = useTeam(r.opponent);
   const [instant, setInstant] = useState(false);
+  const [done, setDone] = useState(false);
+  const skip = useCallback(() => {
+    setInstant(true);
+    setDone(true);
+  }, []);
 
   // When each champion goes down, so its lane card greys out in time with the steps.
   const fellOurs = new Map<number, number>();
@@ -83,22 +89,16 @@ export function MatchScreen({ run, act, busy }: { run: RunView; act: ActFn; busy
         <div className="reveal" style={vars({ "--d": `${resultAt + 0.4}s` })}>
           <XpList gains={r.xp} />
         </div>
-        <div className={styles.actions}>
-          {!instant && (
-            <button type="button" className="btn btn-ghost btn-small" onClick={() => setInstant(true)}>
-              Skip
-            </button>
-          )}
-          <button
-            type="button"
-            className={cx("btn reveal", r.next.kind === "out" ? "btn-ghost" : "btn-primary")}
-            style={vars({ "--d": `${resultAt + 0.5}s` })}
-            disabled={busy}
-            onClick={() => act({ type: "continue" })}
-          >
-            {continueLabel}
-          </button>
-        </div>
+        <PlaybackBar
+          duration={resultAt + 0.7}
+          done={done}
+          onSkip={skip}
+          onDone={() => setDone(true)}
+          continueLabel={continueLabel}
+          onContinue={() => act({ type: "continue" })}
+          disabled={busy}
+          subdued={r.next.kind === "out"}
+        />
       </div>
     </main>
   );

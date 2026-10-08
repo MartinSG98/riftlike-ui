@@ -1,20 +1,27 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 import type { ActFn, PendingFight, PowerPart, RunView } from "../api/types";
 import { TeamBadge } from "../components/Badges";
 import { ChampCrest } from "../components/ChampCrest";
 import { RoleIcon } from "../components/Icons";
+import { PlaybackBar } from "../components/PlaybackBar";
 import { XpList } from "../components/XpList";
 import { cx, ROLE_NAMES, signed, vars } from "../lib/format";
 import { useTeam } from "../state/catalog";
 import styles from "./Fight.module.css";
 
 const VERDICT = { win: "Victory", loss: "Defeat", draw: "Even trade", forfeit: "Forfeit" };
+const PLAYBACK = 2.3; // seconds until the XP list has appeared
 
 export function FightScreen({ run, act, busy }: { run: RunView; act: ActFn; busy: boolean }) {
   const r = (run.pending as PendingFight).result;
   const team = useTeam(run.team);
   const [instant, setInstant] = useState(false);
+  const [done, setDone] = useState(false);
+  const skip = useCallback(() => {
+    setInstant(true);
+    setDone(true);
+  }, []);
   const share = r.ours + r.theirs > 0 ? r.ours / (r.ours + r.theirs) : 0;
   const bonuses = r.ours_parts.filter((p) => p.kind !== "level" && p.kind !== "focus");
 
@@ -85,22 +92,15 @@ export function FightScreen({ run, act, busy }: { run: RunView; act: ActFn; busy
         <div className="reveal" style={vars({ "--d": "2s" })}>
           <XpList gains={r.xp} />
         </div>
-        <div className={styles.actions}>
-          {!instant && (
-            <button type="button" className="btn btn-ghost btn-small" onClick={() => setInstant(true)}>
-              Skip
-            </button>
-          )}
-          <button
-            type="button"
-            className="btn btn-primary reveal"
-            style={vars({ "--d": "2.1s" })}
-            disabled={busy}
-            onClick={() => act({ type: "continue" })}
-          >
-            Continue
-          </button>
-        </div>
+        <PlaybackBar
+          duration={PLAYBACK}
+          done={done}
+          onSkip={skip}
+          onDone={() => setDone(true)}
+          continueLabel="Continue"
+          onContinue={() => act({ type: "continue" })}
+          disabled={busy}
+        />
       </div>
     </main>
   );
