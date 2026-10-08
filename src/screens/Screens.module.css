@@ -191,6 +191,125 @@
   color: var(--red);
 }
 
+/* ---------- stage interstitial ---------- */
+
+.stage {
+  max-width: 900px;
+  padding-top: 9vh;
+}
+
+.stageTitle {
+  font-size: clamp(40px, 7vw, 72px);
+  margin: 6px 0 4px;
+}
+
+.stageXp {
+  margin-top: 28px;
+}
+
+.stageXp :global(.eyebrow) {
+  margin-bottom: 10px;
+}
+
+/* ---------- end of run ---------- */
+
+.end {
+  max-width: 900px;
+  padding-top: 7vh;
+}
+
+.trophy {
+  display: block;
+  margin: 0 auto 10px;
+  color: var(--gold);
+  filter: drop-shadow(0 0 22px rgba(200, 165, 92, 0.45));
+}
+
+.endTitle {
+  font-size: clamp(42px, 8vw, 80px);
+  margin: 6px 0;
+}
+
+.gold {
+  background: linear-gradient(180deg, #fff6dc, var(--gold) 60%, var(--gold-deep));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.lineup {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 22px;
+  margin: 32px 0;
+}
+
+.lineupItem {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  min-width: 90px;
+  text-align: center;
+}
+
+.lineupItem b {
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+.lineupItem small {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.history {
+  margin-bottom: 28px;
+  padding: 14px 16px;
+}
+
+.historyHead {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.history ol {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.history li {
+  display: grid;
+  grid-template-columns: 1fr auto 50px;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: var(--bg-deep);
+  font-size: 13.5px;
+}
+
+.history li b {
+  text-align: right;
+}
+
+.historyLabel {
+  color: var(--text-dim);
+}
+
+.historyOpp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+
 @media (max-width: 920px) {
   .layout {
     grid-template-columns: 1fr;

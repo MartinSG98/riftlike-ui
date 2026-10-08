@@ -5,11 +5,13 @@ import { api, ApiError } from "../api/client";
 import type { Action, RunView } from "../api/types";
 import { TopBar } from "../components/TopBar";
 import { clearSavedRunId, saveRunId } from "../lib/savedRun";
+import { EndScreen } from "../screens/EndScreen";
 import { FightScreen } from "../screens/FightScreen";
 import { FirstPickScreen } from "../screens/FirstPickScreen";
 import { MapScreen } from "../screens/MapScreen";
 import { MatchScreen } from "../screens/MatchScreen";
 import { PickScreen } from "../screens/PickScreen";
+import { StageScreen } from "../screens/StageScreen";
 import styles from "./Pages.module.css";
 
 export function RunPage() {
@@ -96,6 +98,8 @@ export function RunPage() {
         {screen === "pick" && <PickScreen {...props} />}
         {screen === "fight" && <FightScreen {...props} />}
         {screen === "match" && <MatchScreen {...props} />}
+        {screen === "stage" && <StageScreen {...props} />}
+        {screen === "end" && <EndScreen run={run} />}
       </div>
     </>
   );
