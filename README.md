@@ -5,3 +5,14 @@ React frontend for Riftlike, the 2026 League of Legends World Championship playe
 This repo is the interface only. The game engine and the API live in their own repo.
 
 Work in progress. Setup and usage docs will grow as the code does.
+
+## Running locally
+
+Requires Node 18 or newer.
+
+```bash
+npm install
+npm run dev
+```
+
+The app starts on http://localhost:5180.

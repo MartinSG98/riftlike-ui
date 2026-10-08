@@ -1,0 +1,41 @@
+/* Design tokens. Components style against these variables, never raw hex. */
+
+:root {
+  /* Surfaces */
+  --bg: #060b12;
+  --bg-deep: #03070c;
+  --surface: #0b1520;
+  --surface-2: #0f1c2a;
+  --surface-3: #142638;
+  --line: #1c3045;
+  --line-strong: #2a4762;
+
+  /* Text */
+  --text: #ece5d3;
+  --text-dim: #aab3bd;
+  --text-muted: #6f8092;
+
+  /* Accents */
+  --gold: #c8a55c;
+  --gold-bright: #f0dba2;
+  --gold-deep: #7d5f26;
+  --teal: #3fd4c8;
+  --teal-bright: #8ff0e8;
+  --teal-deep: #0e3f40;
+  --red: #e5485e;
+  --red-deep: #3d1219;
+  --green: #4ed39a;
+
+  /* Champion focus */
+  --focus-early: #f0a14b;
+  --focus-mid: #c8a55c;
+  --focus-late: #3fd4c8;
+
+  /* Type */
+  --font-display: "Cinzel", Georgia, "Times New Roman", serif;
+  --font-ui: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Shape */
+  --radius: 4px;
+  --shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
+}
