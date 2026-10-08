@@ -1,0 +1,26 @@
+.mark {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1;
+  background: linear-gradient(180deg, #fff6dc 0%, var(--gold-bright) 38%, var(--gold) 62%, var(--gold-deep) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.sm {
+  font-size: 17px;
+  letter-spacing: 0.14em;
+}
+
+.md {
+  font-size: 32px;
+  letter-spacing: 0.08em;
+}
+
+.xl {
+  font-size: clamp(54px, 11vw, 128px);
+  letter-spacing: 0.04em;
+  filter: drop-shadow(0 6px 24px rgba(0, 0, 0, 0.6));
+}
