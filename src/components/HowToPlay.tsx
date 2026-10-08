@@ -35,8 +35,9 @@ export function HowToPlay({ onClose }: { onClose: () => void }) {
           champion loses 6. Drag a roster row onto another, or click two rows, to swap roles.
         </p>
         <p>
-          <b>Signatures.</b> Each player has five comfort champions worth +5 down to +1 when that player plays one in
-          their own role. Opponents get theirs too.
+          <b>Signatures.</b> Each player's signature champions are the ten they have played most in their pro career,
+          in their role. The most played is worth +5, then +4, +3, +3, +2, +2 and +1 for the last four, when that
+          player plays it in their own role. Opponents get theirs too.
         </p>
         <p>
           <b>Synergy.</b> Some duos give each other power: triple for the bot lane pair, double for jungle and mid,
