@@ -1,0 +1,157 @@
+.panel {
+  padding: 14px 12px 12px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px;
+}
+
+.total {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.total b {
+  margin-left: 4px;
+  font-size: 15px;
+  color: var(--text);
+}
+
+.team {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 4px 14px;
+}
+
+.team span {
+  display: grid;
+}
+
+.team b {
+  font-size: 17px;
+}
+
+.team small {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.rows {
+  display: grid;
+  gap: 4px;
+  border-left: 2px dashed color-mix(in srgb, var(--teal) 45%, transparent);
+  padding-left: 6px;
+}
+
+.row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 52px;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: var(--surface);
+  cursor: pointer;
+  user-select: none;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+}
+
+.filled {
+  background:
+    linear-gradient(90deg, var(--surface) 35%, hsl(var(--h) 45% 22% / 0.55)),
+    var(--surface);
+}
+
+.row:hover {
+  border-color: var(--line-strong);
+}
+
+.row:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 1px;
+}
+
+.selected {
+  border-color: var(--gold);
+  box-shadow: inset 3px 0 0 var(--gold);
+}
+
+.target:hover,
+.over {
+  border-color: var(--teal);
+  box-shadow: inset 3px 0 0 var(--teal);
+}
+
+.role {
+  flex: none;
+  color: var(--text-muted);
+}
+
+.names {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+
+.names b {
+  font-size: 13.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.names small {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.emptyName {
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.power {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.xp {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.xp span {
+  display: block;
+  height: 100%;
+  background: var(--gold);
+  opacity: 0.7;
+}
+
+.warnings {
+  margin: 10px 4px 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+  color: var(--red);
+}
+
+.hint {
+  margin: 10px 4px 0;
+  font-size: 11.5px;
+  color: var(--text-muted);
+}

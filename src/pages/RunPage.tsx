@@ -6,6 +6,7 @@ import type { Action, RunView } from "../api/types";
 import { TopBar } from "../components/TopBar";
 import { clearSavedRunId, saveRunId } from "../lib/savedRun";
 import { FirstPickScreen } from "../screens/FirstPickScreen";
+import { MapScreen } from "../screens/MapScreen";
 import styles from "./Pages.module.css";
 
 export function RunPage() {
@@ -88,6 +89,7 @@ export function RunPage() {
       )}
       <div key={stepKey}>
         {screen === "first" && <FirstPickScreen {...props} />}
+        {screen === "map" && <MapScreen {...props} />}
       </div>
     </>
   );

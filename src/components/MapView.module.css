@@ -1,0 +1,206 @@
+.map {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.edges {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.edge {
+  stroke: var(--line-strong);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 5;
+}
+
+.open {
+  stroke: var(--teal);
+  stroke-dasharray: none;
+  stroke-width: 2;
+}
+
+.walked {
+  stroke: var(--gold);
+  stroke-dasharray: none;
+  stroke-width: 2.5;
+}
+
+.start {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid var(--gold);
+  border-radius: 50%;
+  background: var(--bg-deep);
+  color: var(--gold);
+  font-size: 11px;
+}
+
+.here {
+  box-shadow: 0 0 0 4px rgba(200, 165, 92, 0.18);
+}
+
+/* ---------- nodes ---------- */
+
+.node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 50%;
+  background: var(--bg-deep);
+  cursor: default;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s,
+    border-color 0.15s;
+}
+
+.node:disabled {
+  color: inherit;
+}
+
+.node[data-tip]:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  z-index: 10;
+  left: 50%;
+  bottom: calc(100% + 26px);
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 240px;
+  padding: 7px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--bg-deep);
+  box-shadow: var(--shadow);
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--text-dim);
+  text-align: left;
+  pointer-events: none;
+}
+
+.node.open {
+  border-color: var(--teal);
+  box-shadow:
+    0 0 0 4px rgba(63, 212, 200, 0.12),
+    0 0 18px rgba(63, 212, 200, 0.35);
+  cursor: pointer;
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+.node.open:hover {
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.node.here,
+.node.visited {
+  border-color: var(--gold);
+}
+
+.node.here {
+  box-shadow: 0 0 0 4px rgba(200, 165, 92, 0.2);
+}
+
+.node.visited {
+  opacity: 0.55;
+}
+
+.node.locked {
+  opacity: 0.75;
+}
+
+.pick {
+  border-color: color-mix(in srgb, var(--teal) 55%, var(--line-strong));
+}
+
+.plus {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--teal);
+}
+
+.fight {
+  border-color: color-mix(in srgb, var(--gold) 60%, var(--line-strong));
+}
+
+.fightCrest {
+  border-radius: 50% !important;
+  width: 40px !important;
+  height: 40px !important;
+}
+
+.badge {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  min-width: 24px;
+  padding: 1px 4px;
+  border-radius: 2px;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 15px;
+  text-align: center;
+}
+
+.enemyBadge {
+  background: var(--red-deep);
+  border: 1px solid var(--red);
+  color: #ffd9de;
+}
+
+.caption {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.match {
+  width: 64px;
+  height: 64px;
+  border: 2px solid var(--red);
+  background: radial-gradient(circle, var(--red-deep), var(--bg-deep) 70%);
+}
+
+.match.open {
+  border-color: var(--red);
+  box-shadow:
+    0 0 0 5px rgba(229, 72, 94, 0.14),
+    0 0 22px rgba(229, 72, 94, 0.4);
+}
+
+@keyframes pulse {
+  50% {
+    box-shadow:
+      0 0 0 7px rgba(63, 212, 200, 0.08),
+      0 0 26px rgba(63, 212, 200, 0.45);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .node.open {
+    animation: none;
+  }
+}

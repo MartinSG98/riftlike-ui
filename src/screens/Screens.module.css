@@ -7,3 +7,62 @@
   max-width: 980px;
   margin: 28px auto;
 }
+
+/* ---------- map day ---------- */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(290px, 340px) minmax(0, 1fr);
+  gap: 20px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 20px 20px 64px;
+}
+
+.side {
+  position: sticky;
+  top: 76px;
+  align-self: start;
+}
+
+.main {
+  min-width: 0;
+}
+
+.dayLabel {
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.mapPanel {
+  padding: 8px 12px 18px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(63, 212, 200, 0.06), transparent 60%),
+    linear-gradient(180deg, var(--surface-2), var(--surface));
+}
+
+.ready {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 36px 24px;
+  text-align: center;
+}
+
+.ready .lead {
+  margin: 0 auto 8px;
+}
+
+@media (max-width: 920px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .side {
+    position: static;
+  }
+}
