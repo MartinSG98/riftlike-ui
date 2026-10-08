@@ -79,14 +79,34 @@
 }
 
 .lost {
-  animation: fall 0.4s ease forwards;
-  animation-delay: 1.5s;
+  animation:
+    shake 0.4s ease 1.2s,
+    fall 0.4s ease 1.6s forwards;
 }
 
 @keyframes fall {
   to {
     opacity: 0.4;
     filter: grayscale(0.9);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: none;
+  }
+  20% {
+    transform: translateX(-5px) rotate(-1deg);
+  }
+  40% {
+    transform: translateX(4px) rotate(1deg);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(2px);
   }
 }
 
@@ -161,7 +181,38 @@
   border: 1px solid var(--line-strong);
   border-radius: 2px;
   background: linear-gradient(90deg, #5a1a26, var(--red));
-  overflow: hidden;
+}
+
+/* The point of impact, where the two powers meet once the bar settles. */
+.spark {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  left: calc(var(--share) * 100%);
+  width: 4px;
+  margin-left: -2px;
+  border-radius: 2px;
+  background: #fff;
+  box-shadow:
+    0 0 12px 3px rgba(255, 255, 255, 0.7),
+    0 0 28px 10px rgba(200, 165, 92, 0.45);
+  opacity: 0;
+  animation: spark 0.7s ease-out 1.2s forwards;
+}
+
+@keyframes spark {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.4);
+  }
+  25% {
+    opacity: 1;
+    transform: scaleY(1.4);
+  }
+  100% {
+    opacity: 0.35;
+    transform: scaleY(1);
+  }
 }
 
 .barUs {
@@ -248,6 +299,7 @@
 }
 
 .side {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -269,8 +321,63 @@
 }
 
 .side.fallen {
-  animation: fall 0.35s ease forwards;
-  animation-delay: var(--d);
+  animation:
+    shake 0.3s ease calc(var(--d) - 0.3s),
+    fall 0.35s ease var(--d) forwards;
+}
+
+/* A clash: both lane cards light up and show the power they lost. */
+.flash {
+  position: absolute;
+  inset: -1px;
+  border-radius: 2px;
+  box-shadow:
+    inset 0 0 0 1px var(--gold-bright),
+    0 0 18px rgba(240, 219, 162, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  animation: flash 0.55s ease-out var(--d);
+}
+
+@keyframes flash {
+  30% {
+    opacity: 1;
+  }
+}
+
+.hit {
+  position: absolute;
+  top: 2px;
+  font-size: 15px;
+  font-weight: 900;
+  color: #ff8394;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  pointer-events: none;
+  animation: hit 0.9s ease-out var(--d) forwards;
+}
+
+.us .hit {
+  right: 58px;
+}
+
+.them .hit {
+  left: 58px;
+}
+
+@keyframes hit {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.8);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(0) scale(1.15);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-16px) scale(1);
+  }
 }
 
 .sideText {
@@ -319,10 +426,31 @@
   color: var(--text-dim);
 }
 
-.steps li::before {
+/* Each clash line slides in from the winner's side. */
+.step {
+  --from: 0;
+  padding: 2px 8px;
+  border-left: 2px solid transparent;
+  opacity: 0;
+  animation: slideIn 0.4s ease var(--d) forwards;
+}
+
+.step::before {
   content: "›";
   margin-right: 8px;
   color: var(--text-muted);
+}
+
+.stepUs {
+  --from: -16px;
+  border-left-color: var(--teal);
+  background: linear-gradient(90deg, rgba(63, 212, 200, 0.08), transparent 60%);
+}
+
+.stepThem {
+  --from: 16px;
+  border-left-color: var(--red);
+  background: linear-gradient(90deg, rgba(229, 72, 94, 0.08), transparent 60%);
 }
 
 .stepUs b:first-of-type {
@@ -331,6 +459,17 @@
 
 .stepThem b:first-of-type {
   color: var(--red);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(var(--from));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .sub {

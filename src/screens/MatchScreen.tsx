@@ -24,13 +24,20 @@ export function MatchScreen({ run, act, busy }: { run: RunView; act: ActFn; busy
     setDone(true);
   }, []);
 
-  // When each champion goes down, so its lane card greys out in time with the steps.
+  // Every clash hits both lane cards at its moment in the playback, and the loser goes down
+  // a beat later, so the cards react in time with the log.
   const fellOurs = new Map<number, number>();
   const fellTheirs = new Map<number, number>();
+  const hitsOurs = new Map<number, Hit[]>();
+  const hitsTheirs = new Map<number, Hit[]>();
+  const addHit = (hits: Map<number, Hit[]>, lane: number, hit: Hit) => hits.set(lane, [...(hits.get(lane) ?? []), hit]);
   r.steps.forEach((s, k) => {
-    const at = START + k * STEP + 0.3;
-    if (s.winner !== "us") fellOurs.set(s.ours, at);
-    if (s.winner !== "them") fellTheirs.set(s.theirs, at);
+    const at = START + k * STEP;
+    const amount = Math.min(s.ours_power, s.theirs_power);
+    addHit(hitsOurs, s.ours, { at, amount });
+    addHit(hitsTheirs, s.theirs, { at, amount });
+    if (s.winner !== "us") fellOurs.set(s.ours, at + 0.3);
+    if (s.winner !== "them") fellTheirs.set(s.theirs, at + 0.3);
   });
   const resultAt = START + r.steps.length * STEP + 0.2;
 
@@ -58,11 +65,11 @@ export function MatchScreen({ run, act, busy }: { run: RunView; act: ActFn; busy
         <div className={styles.lanes}>
           {ROLES.map((role, i) => (
             <div key={role} className={styles.lane}>
-              <Side lane={r.ours[i]} side="us" fellAt={fellOurs.get(i)} />
+              <Side lane={r.ours[i]} side="us" fellAt={fellOurs.get(i)} hits={hitsOurs.get(i)} />
               <span className={styles.laneRole} title={ROLE_NAMES[role]}>
                 <RoleIcon role={role} size={16} />
               </span>
-              <Side lane={r.theirs[i]} side="them" fellAt={fellTheirs.get(i)} />
+              <Side lane={r.theirs[i]} side="them" fellAt={fellTheirs.get(i)} hits={hitsTheirs.get(i)} />
             </div>
           ))}
         </div>
@@ -71,8 +78,9 @@ export function MatchScreen({ run, act, busy }: { run: RunView; act: ActFn; busy
           {r.steps.map((s, k) => (
             <li
               key={k}
-              className={cx("reveal", s.winner === "us" ? styles.stepUs : s.winner === "them" ? styles.stepThem : undefined)}
+              className={cx(styles.step, s.winner === "us" ? styles.stepUs : s.winner === "them" ? styles.stepThem : undefined)}
               style={vars({ "--d": `${START + k * STEP}s` })}
+              data-timed
             >
               {describe(r, s)}
             </li>
@@ -104,7 +112,22 @@ export function MatchScreen({ run, act, busy }: { run: RunView; act: ActFn; busy
   );
 }
 
-function Side({ lane, side, fellAt }: { lane: LaneSide; side: "us" | "them"; fellAt?: number }) {
+interface Hit {
+  at: number;
+  amount: number;
+}
+
+function Side({
+  lane,
+  side,
+  fellAt,
+  hits = [],
+}: {
+  lane: LaneSide;
+  side: "us" | "them";
+  fellAt?: number;
+  hits?: Hit[];
+}) {
   return (
     <div
       className={cx(styles.side, styles[side], fellAt !== undefined && styles.fallen)}
@@ -120,6 +143,16 @@ function Side({ lane, side, fellAt }: { lane: LaneSide; side: "us" | "them"; fel
         {lane.power}
         {lane.counter > 0 && <small>counter +{lane.counter}</small>}
       </span>
+      {hits.map((hit, i) => (
+        <span key={i} aria-hidden="true">
+          <span className={styles.flash} style={vars({ "--d": `${hit.at}s` })} data-timed />
+          {hit.amount > 0 && (
+            <span className={styles.hit} style={vars({ "--d": `${hit.at}s` })} data-timed>
+              −{hit.amount}
+            </span>
+          )}
+        </span>
+      ))}
     </div>
   );
 }

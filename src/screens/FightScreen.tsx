@@ -63,6 +63,7 @@ export function FightScreen({ run, act, busy }: { run: RunView; act: ActFn; busy
             </span>
             <div className={styles.bar}>
               <span className={styles.barUs} style={vars({ "--share": share })} data-timed />
+              <span className={styles.spark} style={vars({ "--share": share })} data-timed />
             </div>
             {counter && (
               <span
