@@ -1,3 +1,6 @@
+import { useState } from "react";
+
+import { iconUrl, splashUrl } from "../lib/art";
 import { emblemFor, polygonPoints } from "../lib/emblem";
 import { cx, initials, vars } from "../lib/format";
 import { useCatalog } from "../state/catalog";
@@ -5,7 +8,10 @@ import styles from "./ChampCrest.module.css";
 
 type Size = "xs" | "sm" | "md" | "lg" | "xl";
 
-/** A champion's crest: its own generated emblem, ringed in the color of its focus. */
+/**
+ * A champion's crest: its portrait, ringed in the color of its focus. Falls back to the
+ * generated emblem if the portrait is missing.
+ */
 export function ChampCrest({
   champ,
   size = "md",
@@ -20,6 +26,7 @@ export function ChampCrest({
   className?: string;
 }) {
   const { champions } = useCatalog();
+  const [broken, setBroken] = useState<string | null>(null);
   if (!champ) return <span className={cx(styles.crest, styles[size], styles.empty, className)} />;
   const info = champions[champ];
   return (
@@ -28,21 +35,36 @@ export function ChampCrest({
       style={vars({ "--h": emblemFor(champ).hue })}
       title={champ}
     >
-      <Emblem champ={champ} className={styles.emblem} />
-      <span className={styles.letters}>{initials(champ)}</span>
+      {broken === champ ? (
+        <>
+          <Emblem champ={champ} className={styles.emblem} />
+          <span className={styles.letters}>{initials(champ)}</span>
+        </>
+      ) : (
+        <span className={styles.portrait}>
+          <img src={iconUrl(champ)} alt="" loading="lazy" onError={() => setBroken(champ)} />
+        </span>
+      )}
       {level != null && <span className={styles.level}>{level}</span>}
     </span>
   );
 }
 
-/** The tall header on champion cards. */
+/** The tall header on champion cards, showing the champion's splash art. */
 export function ChampBanner({ champ, children }: { champ: string; children?: React.ReactNode }) {
   const { champions } = useCatalog();
+  const [broken, setBroken] = useState<string | null>(null);
   const info = champions[champ];
   return (
     <div className={cx(styles.banner, styles[info.focus])} style={vars({ "--h": emblemFor(champ).hue })}>
-      <Emblem champ={champ} className={styles.bannerEmblem} />
-      <span className={styles.ghost}>{initials(champ)}</span>
+      {broken === champ ? (
+        <>
+          <Emblem champ={champ} className={styles.bannerEmblem} />
+          <span className={styles.ghost}>{initials(champ)}</span>
+        </>
+      ) : (
+        <img className={styles.splash} src={splashUrl(champ)} alt="" onError={() => setBroken(champ)} />
+      )}
       <div className={styles.bannerContent}>{children}</div>
     </div>
   );
