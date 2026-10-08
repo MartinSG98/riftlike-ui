@@ -63,11 +63,19 @@ export interface PowerLine {
   parts: PowerPart[];
 }
 
+export interface SynergyLink {
+  roles: [Role, Role];
+  champs: [string, string];
+  archetype: string | null; // null for a hand-picked duo
+  value: number; // what each of the two champions gets
+}
+
 export interface Lineup {
   slots: Record<Role, Unit | null>;
   power: Record<Role, PowerLine | null>;
   total: number;
   warnings: string[];
+  synergies: SynergyLink[];
 }
 
 export interface MapNode {
@@ -208,7 +216,7 @@ export interface OfferView {
   power: number;
   power_16: number;
   signatures: { role: Role; player: string; bonus: number }[];
-  synergies: { champ: string; role: Role; value: number }[];
+  synergies: { champ: string; role: Role; value: number; label: string }[];
   projections: Record<Role, Projection>;
   best_role: Role;
 }

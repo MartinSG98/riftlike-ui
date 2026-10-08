@@ -3,7 +3,7 @@ import { cx, ROLE_NAMES, signed } from "../lib/format";
 import { useCatalog } from "../state/catalog";
 import { FocusChip, PlayerAvatar, PowerBox } from "./Badges";
 import styles from "./ChampCard.module.css";
-import { ChampBanner, ChampCrest } from "./ChampCrest";
+import { ChampBanner } from "./ChampCrest";
 import { RoleIcon } from "./Icons";
 
 /** An offered champion. "first" shows the power curve for the opening role, "pick" shows team fit. */
@@ -113,11 +113,13 @@ export function ChampCard({
             {offer.synergies.length ? "Synergy with your team" : "No synergy with your current team"}
           </span>
           {offer.synergies.map((s) => (
-            <div key={s.role} className={styles.line}>
-              <ChampCrest champ={s.champ} size="xs" />
+            <div key={s.role} className={cx(styles.line, s.value > 0 && styles.synergyLine)}>
+              <RoleIcon role={s.role} size={14} className={styles.lineRole} />
               <span className={styles.lineText}>
-                <b>{s.champ}</b>
-                <small>{ROLE_NAMES[s.role]}</small>
+                <b>{s.label}</b>
+                <small>
+                  {ROLE_NAMES[s.role]}, {s.value > 0 ? "both get" : "both lose"} {Math.abs(s.value)}
+                </small>
               </span>
               <b className={s.value > 0 ? "pos" : "neg"}>{signed(s.value)}</b>
             </div>

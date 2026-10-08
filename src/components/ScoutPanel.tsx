@@ -8,6 +8,7 @@ import { ChampCrest } from "./ChampCrest";
 import { RoleIcon } from "./Icons";
 import { RosterModal } from "./RosterModal";
 import styles from "./ScoutPanel.module.css";
+import { SynergyList } from "./SynergyList";
 
 /** The opponent waiting at the bottom of the map. */
 export function ScoutPanel({ run }: { run: RunView }) {
@@ -53,6 +54,7 @@ export function ScoutPanel({ run }: { run: RunView }) {
           );
         })}
       </div>
+      <SynergyList links={opp.lineup.synergies} tone="them" />
       <div className={styles.foot}>
         <span>
           Their power <b>{opp.lineup.total}</b>
