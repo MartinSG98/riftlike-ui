@@ -1,0 +1,43 @@
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-deep);
+}
+
+.name {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+
+.name b {
+  font-size: 13.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.name small {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.xp {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--gold);
+  white-space: nowrap;
+}

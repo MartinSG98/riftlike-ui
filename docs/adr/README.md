@@ -8,3 +8,4 @@ Each record answers three questions. What was the situation, what did we decide,
 |---|---|---|
 | [0001](0001-a-thin-client-over-the-game-api.md) | A thin client over the game API | Accepted |
 | [0002](0002-crests-instead-of-game-art.md) | Crests instead of game art | Accepted |
+| [0003](0003-css-only-playback-animations.md) | CSS-only playback animations | Accepted |
