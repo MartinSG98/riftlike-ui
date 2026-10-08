@@ -39,11 +39,11 @@ Without a reachable backend the app shows an offline screen with a retry button.
 
 **Picks** show three champion cards with the power each would have in its best role, the gain for the team, their focus, roles, signature bonuses and duo synergies with the current team. Hovering a card previews it along the team bar below. Picking one opens the role chooser, where every slot shows the power the champion would have there, the change to the team total and who would leave. Before the Semifinal and the Final the same screen runs three times in a row as a draft.
 
-**Lane fights** play back as a power bar sliding to its final share, a spark where the two powers meet, the matchup bonus, the margin and a victory or defeat banner, followed by the XP each champion earned.
+**Lane fights** play back one step at a time: your champion's base power, the enemy's, your bonuses, the lane matchup, then the clash, where the power bar slides to its final share with a spark where the two powers meet. A victory or defeat banner and the XP each champion earned close it out.
 
-**Matches** list both lineups lane by lane, then play the clashes one after another. Both lane cards flash and show the power they lost, the loser shakes and greys out, and each line of the log slides in from the winner's side. The match finishes with the result, the next step and the XP.
+**Matches** play back like a short play-by-play. First every lane builds its power from top to bottom: the base for both sides, then each side's bonuses as chips, then the lane matchup, with the numbers updating as they go and the lane in focus outlined. Then the clashes run one by one. Both cards light up and show the power they lost, the loser greys out, and the winner shows what it has left and moves on to the next enemy. A commentary box under the lanes says what happens at every step. The match finishes with the result, the next step and the XP.
 
-While a fight or a match plays, a progress bar with a Skip button sits under it, and a Continue button takes its place when the playback is done. Space or Enter does whichever is showing.
+While a fight or a match plays, a bar with its progress, a 2x speed toggle and a Skip button sits under it, and a Continue button takes its place when the playback is done. Space or Enter does whichever is showing. The speed choice is remembered.
 
 **Stage changes** announce the next stage, and when the Swiss stage ended early they list the training XP for the skipped days. **The end of the run** shows the final lineup and every match played.
 
@@ -53,7 +53,7 @@ Dark navy surfaces with gold for titles and highlights, teal for anything you ca
 
 There is no game art. Champions are drawn as crests: a square tinted per champion, ringed in the color of its early, mid or late focus, carrying an abstract emblem generated from the champion's name, so every champion has its own recognisable mark. Teams are their tag on a badge in the team color. The reasoning is in [ADR 0002](docs/adr/0002-crests-instead-of-game-art.md) and [ADR 0004](docs/adr/0004-a-generated-emblem-per-champion.md).
 
-Fight and match playback is plain CSS, with a delay per element and one class that skips to the end. Reduced motion settings get the result at once.
+Fight and match playback runs on a timeline of beats built from the result, see [ADR 0005](docs/adr/0005-step-by-step-playback-on-a-timeline.md). Effects are short CSS animations that play when their beat arrives, and reduced motion settings turn them off.
 
 The brief for the next visual pass, with every screen, the data it has to hold and the constraints, is in [docs/design/design-brief.md](docs/design/design-brief.md).
 
@@ -69,7 +69,8 @@ src/
 │                 pick, lane fight, match, stage change, end of run
 ├── pages/        title, team select and the run page
 ├── state/        the catalog context
-├── lib/          formatting helpers, emblem generator, saved run id
+├── lib/          formatting helpers, emblem generator, playback beats
+│                 and timeline, saved run id
 └── styles/       design tokens and global styles
 ```
 
