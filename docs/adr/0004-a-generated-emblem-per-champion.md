@@ -1,7 +1,7 @@
 # 0004. A generated emblem per champion
 
 Date: 2026-10-08
-Status: Accepted, partially supersedes [0002](0002-crests-instead-of-game-art.md)
+Status: Accepted, partially supersedes [0002](0002-crests-instead-of-game-art.md), partially superseded by [0006](0006-official-champion-art.md)
 
 ## Context
 

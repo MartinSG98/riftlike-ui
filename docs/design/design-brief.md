@@ -19,13 +19,13 @@ The current look works and the next pass should evolve it, not replace it.
 - The three-column match day: roster on the left, the map centered, the next opponent on the right.
 - The playback of fights and matches: a progress bar with Skip while it plays, Continue once it is done, Space or Enter for both.
 
-## Hard constraint: no game art
+## Art
 
-No champion splash art, icons or portraits, no team logos, no player photos, nothing taken from Riot Games or the teams, and nothing drawn to resemble their characters. Everything visual has to be original.
+Champions use the official art from Riot's Data Dragon, under Riot's fan project policy (see [ADR 0006](../adr/0006-official-champion-art.md)). Each crest is the champion's square portrait in a rounded square, with a ring in the color of the champion's focus (early, mid or late game) and a level badge in the corner. Card banners show the champion's splash art, faded into the card body so the name stays readable. When an image is missing, the crest falls back to a generated geometric emblem on a tinted square with the initials, so the design has to work for that case as well.
 
-Champions are shown as crests. Each crest is a rounded square tinted with a hue from the champion's name, with a generated geometric emblem (a polygon, star or framed polygon with its own sides, rotation, inner mark, rays and accent color), a ring in the color of the champion's focus (early, mid or late game), a level badge in the corner and, on larger sizes, the initials. Teams are their short tag (GEN, T1, BLG, TLAW...) on a badge in the team color. Players are their initials in a circle.
+Nothing else comes from Riot Games or the teams: no team logos and no player photos. Teams are their short tag (GEN, T1, BLG, TLAW...) on a badge in the team color. Players are their initials in a circle.
 
-The design is welcome to restyle the crest, the badges and the emblem drawing completely, as long as they stay original, abstract and generated from data. Please design crest sizes from 22px (inline lists) to about 92px (detail views), and a wide banner variant for the top of champion cards.
+The design is welcome to restyle the crest frame, the badges and the banner completely. Please design crest sizes from 22px (inline lists) to about 92px (detail views), and a wide banner variant for the top of champion cards.
 
 ## What to improve
 

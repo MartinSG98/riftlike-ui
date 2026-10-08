@@ -25,6 +25,18 @@ VITE_API_URL=http://my-server:8010
 
 Without a reachable backend the app shows an offline screen with a retry button. Once the catalog loads, everything works.
 
+### Champion art
+
+The champion images are not in the repo. They come from Riot's Data Dragon and go into `public/champions/`, which git ignores:
+
+```
+public/champions/
+├── icons/<id>.png       square portraits, used in crests
+└── splash/<id>_0.jpg    default splash art, used on card banners
+```
+
+`<id>` is the champion's Data Dragon id, listed in [champion.json](https://ddragon.leagueoflegends.com/cdn/16.20.1/data/en_US/champion.json). Icons are at `https://ddragon.leagueoflegends.com/cdn/16.20.1/img/champion/<id>.png` and splashes at `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/<id>_0.jpg`. The app runs without the folder too, it then draws each champion's generated emblem instead.
+
 ## What is in the app
 
 **The title screen** starts a new run, continues the one in progress, explains the rules in a modal and lists the most recent finished runs. The run in progress is remembered in local storage, so closing the tab loses nothing.
@@ -51,7 +63,7 @@ While a fight or a match plays, a bar with its progress, a 2x speed toggle and a
 
 Dark navy surfaces with gold for titles and highlights, teal for anything you can act on and red for the opponent. The tokens live once in [src/styles/tokens.css](src/styles/tokens.css) as CSS custom properties, and components never use raw hex values. Cinzel, loaded from Google Fonts, carries the display type, and Barlow carries the interface.
 
-There is no game art. Champions are drawn as crests: a square tinted per champion, ringed in the color of its early, mid or late focus, carrying an abstract emblem generated from the champion's name, so every champion has its own recognisable mark. Teams are their tag on a badge in the team color. The reasoning is in [ADR 0002](docs/adr/0002-crests-instead-of-game-art.md) and [ADR 0004](docs/adr/0004-a-generated-emblem-per-champion.md).
+Champions use the official art from Data Dragon. Crests show the square portrait, ringed in the color of the champion's early, mid or late focus, and card banners show the splash. If an image is missing, the champion falls back to an abstract emblem generated from its name. Teams are their tag on a badge in the team color. The reasoning is in [ADR 0006](docs/adr/0006-official-champion-art.md), which replaces the art-free crests of [ADR 0002](docs/adr/0002-crests-instead-of-game-art.md) and [ADR 0004](docs/adr/0004-a-generated-emblem-per-champion.md).
 
 Fight and match playback runs on a timeline of beats built from the result, see [ADR 0005](docs/adr/0005-step-by-step-playback-on-a-timeline.md). Effects are short CSS animations that play when their beat arrives, and reduced motion settings turn them off.
 
@@ -69,11 +81,11 @@ src/
 │                 pick, lane fight, match, stage change, end of run
 ├── pages/        title, team select and the run page
 ├── state/        the catalog context
-├── lib/          formatting helpers, emblem generator, playback beats
-│                 and timeline, saved run id
+├── lib/          formatting helpers, champion art paths, emblem generator,
+│                 playback beats and timeline, saved run id
 └── styles/       design tokens and global styles
 ```
 
 State is plain React. The catalog loads once at startup into a context, the run page holds the current run and swaps it for the response of every action, and the screen shown is picked from the run's pending step. There is no state library, the server is the source of truth.
 
-Riftlike is a fan project. It is not affiliated with or endorsed by Riot Games. League of Legends and all related names are trademarks of Riot Games.
+Riftlike was created under Riot Games' "Legal Jibber Jabber" policy using assets owned by Riot Games. Riot Games does not endorse or sponsor this project. League of Legends and all related names are trademarks of Riot Games.

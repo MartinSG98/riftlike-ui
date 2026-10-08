@@ -7,7 +7,8 @@ Each record answers three questions. What was the situation, what did we decide,
 | # | Decision | Status |
 |---|---|---|
 | [0001](0001-a-thin-client-over-the-game-api.md) | A thin client over the game API | Accepted |
-| [0002](0002-crests-instead-of-game-art.md) | Crests instead of game art | Accepted, partially superseded by 0004 |
+| [0002](0002-crests-instead-of-game-art.md) | Crests instead of game art | Accepted, partially superseded by 0004 and 0006 |
 | [0003](0003-css-only-playback-animations.md) | CSS-only playback animations | Superseded by 0005 |
-| [0004](0004-a-generated-emblem-per-champion.md) | A generated emblem per champion | Accepted |
+| [0004](0004-a-generated-emblem-per-champion.md) | A generated emblem per champion | Accepted, partially superseded by 0006 |
 | [0005](0005-step-by-step-playback-on-a-timeline.md) | Step by step playback on a timeline | Accepted |
+| [0006](0006-official-champion-art.md) | Official champion art | Accepted |
