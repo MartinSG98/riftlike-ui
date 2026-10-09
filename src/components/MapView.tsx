@@ -1,5 +1,6 @@
-import type { ActFn, MapNode, RunView } from "../api/types";
-import { cx, ROLE_NAMES } from "../lib/format";
+import type { ActFn, MapNode, OpponentView, Role, RunView } from "../api/types";
+import { cx, ROLE_NAMES, ROLES } from "../lib/format";
+import { useTeam } from "../state/catalog";
 import { TeamBadge } from "./Badges";
 import { ChampCrest } from "./ChampCrest";
 import { RoleIcon } from "./Icons";
@@ -17,7 +18,7 @@ interface Point {
 export function MapView({ run, act, busy }: { run: RunView; act: ActFn; busy: boolean }) {
   const map = run.map!;
   const rows = Math.max(...map.nodes.map((n) => n.row)) + 1;
-  const height = TOP + (rows + 1) * ROW_H + 52;
+  const height = TOP + (rows + 1) * ROW_H + 66;
   const reach = new Set(run.reachable);
   const visited = new Set(map.path);
   const byId = new Map(map.nodes.map((n) => [n.id, n]));
@@ -29,9 +30,11 @@ export function MapView({ run, act, busy }: { run: RunView; act: ActFn; busy: bo
     return { x: n.x * 100, y: TOP + (n.row + 1) * ROW_H };
   };
 
-  // Everything still reachable later: the open nodes and whatever lies below them.
+  // Everything still reachable later: the open nodes and whatever lies below them. While a pick
+  // is waiting nothing is open yet, so plan from the nodes below the one you stand on.
+  const next = run.reachable.length ? run.reachable : (byId.get(map.current)?.children ?? []);
   const ahead = new Set<string>();
-  const queue = [...run.reachable];
+  const queue = [...next];
   while (queue.length) {
     const id = queue.shift()!;
     if (ahead.has(id) || id === "match") continue;
@@ -65,6 +68,8 @@ export function MapView({ run, act, busy }: { run: RunView; act: ActFn; busy: bo
     return undefined;
   };
 
+  const empty = ROLES.filter((r) => !run.lineup.slots[r]);
+
   const enter = (id: string) => {
     if (!busy && reach.has(id)) act({ type: "enter", node: id });
   };
@@ -78,16 +83,14 @@ export function MapView({ run, act, busy }: { run: RunView; act: ActFn; busy: bo
           const q = pos(b);
           const key = `${a}>${b}`;
           const state = edgeState(a, b);
+          const line = (className: string | undefined) => (
+            <line x1={p.x} y1={p.y} x2={q.x} y2={q.y} className={className} vectorEffect="non-scaling-stroke" />
+          );
           return (
-            <line
-              key={key}
-              x1={p.x}
-              y1={p.y}
-              x2={q.x}
-              y2={q.y}
-              className={cx(styles.edge, state)}
-              vectorEffect="non-scaling-stroke"
-            />
+            <g key={key}>
+              {state === styles.walked && line(styles.glow)}
+              {line(cx(styles.edge, state))}
+            </g>
           );
         })}
       </svg>
@@ -100,22 +103,26 @@ export function MapView({ run, act, busy }: { run: RunView; act: ActFn; busy: bo
       </span>
 
       {map.nodes.map((n) => (
-        <Node key={n.id} node={n} run={run} at={pos(n.id)} state={stateOf(n.id)} onEnter={() => enter(n.id)} />
+        <Node
+          key={n.id}
+          node={n}
+          run={run}
+          empty={empty}
+          at={pos(n.id)}
+          state={stateOf(n.id)}
+          onEnter={() => enter(n.id)}
+        />
       ))}
 
+      {run.opponent && <span className={styles.arena} style={place(pos("match"))} aria-hidden="true" />}
       {run.opponent && (
-        <button
-          type="button"
-          className={cx(styles.node, styles.match, reach.has("match") ? styles.open : styles.ahead)}
-          style={place(pos("match"))}
-          onClick={() => enter("match")}
-          disabled={!reach.has("match") || busy}
-          aria-label="Play the match"
-        >
-          <TeamBadge code={run.opponent.code} size="md" />
-          <span className={cx(styles.badge, styles.enemyBadge)}>{run.opponent.lineup.total}</span>
-          <span className={styles.caption}>Match</span>
-        </button>
+        <MatchNode
+          opponent={run.opponent}
+          at={pos("match")}
+          open={reach.has("match")}
+          busy={busy}
+          onEnter={() => enter("match")}
+        />
       )}
     </div>
     <ul className={styles.legend} aria-label="Map legend">
@@ -135,19 +142,58 @@ function place(p: Point) {
   return { left: `${p.x}%`, top: p.y };
 }
 
+/** The day's destination: the opponent's banner at the bottom of the map. */
+function MatchNode({
+  opponent,
+  at,
+  open,
+  busy,
+  onEnter,
+}: {
+  opponent: OpponentView;
+  at: Point;
+  open: boolean;
+  busy: boolean;
+  onEnter: () => void;
+}) {
+  const team = useTeam(opponent.code);
+  return (
+    <button
+      type="button"
+      className={cx(styles.node, styles.match, open ? styles.open : styles.ahead)}
+      style={place(at)}
+      onClick={onEnter}
+      disabled={!open || busy}
+      aria-label={`Play the match against ${team.name}, power ${opponent.lineup.total}`}
+    >
+      <TeamBadge code={opponent.code} size="md" />
+      <span className={styles.matchText}>
+        <span className={styles.matchEyebrow}>{open ? "Play the match" : "The match"}</span>
+        <b>{team.name}</b>
+        <span>
+          Power <b className={styles.matchPower}>{opponent.lineup.total}</b>
+        </span>
+      </span>
+    </button>
+  );
+}
+
 function Node({
   node,
   run,
+  empty,
   at,
   state,
   onEnter,
 }: {
   node: MapNode;
   run: RunView;
+  empty: Role[];
   at: Point;
   state: NodeState;
   onEnter: () => void;
 }) {
+  const upcoming = state === "open" || state === "ahead";
   const clickable = state === "open";
   const common = {
     type: "button" as const,
@@ -163,14 +209,21 @@ function Node({
   );
 
   if (node.type === "pick") {
+    // Every pick offers a champion for one of your empty roles, so these nodes matter most then.
+    const fills = upcoming && empty.length > 0;
+    const fillLabel = empty.length === 1 ? `Fills ${ROLE_NAMES[empty[0]]}` : "Fills a role";
+    const tip = fills
+      ? `Pick a champion: three offers, one of them for ${empty.length === 1 ? `your empty ${ROLE_NAMES[empty[0]]}` : "one of your empty roles"}`
+      : "Pick a champion: three offers, take one into any role or skip";
     return (
       <button
         {...common}
-        className={cx(styles.node, styles.pick, styles[state])}
-        aria-label="Pick a champion"
-        data-tip="Pick a champion: three offers, take one into any role or skip"
+        className={cx(styles.node, styles.pick, styles[state], fills && styles.fills)}
+        aria-label={fills ? `Pick a champion, ${fillLabel.toLowerCase()}` : "Pick a champion"}
+        data-tip={tip}
       >
         <span className={styles.plus}>+</span>
+        {fills && <span className={cx(styles.caption, styles.fillTag)}>{fillLabel}</span>}
         {marks}
       </button>
     );
@@ -182,13 +235,23 @@ function Node({
   const tip = ours
     ? `${ROLE_NAMES[role]} 1v1 vs ${enemy.champ} (level ${enemy.level}, power ${node.power}). Your ${run.lineup.slots[role]!.champ}: ${ours.total}`
     : `${ROLE_NAMES[role]} 1v1 vs ${enemy.champ}. You have no ${ROLE_NAMES[role]} champion, so this is a forfeit`;
+  const forfeit = !ours && upcoming;
   return (
-    <button {...common} className={cx(styles.node, styles.fight, styles[state])} aria-label={tip} data-tip={tip}>
+    <button
+      {...common}
+      className={cx(styles.node, styles.fight, styles[state], forfeit && styles.forfeit)}
+      aria-label={tip}
+      data-tip={tip}
+    >
       <ChampCrest champ={enemy.champ} size="md" dim={state === "gone"} className={styles.fightCrest} />
+      {forfeit && (
+        <span className={styles.forfeitMark} aria-hidden="true">
+          ✕
+        </span>
+      )}
       {state !== "visited" && state !== "here" && <span className={cx(styles.badge, styles.enemyBadge)}>{node.power}</span>}
-      <span className={styles.caption}>
-        <RoleIcon role={role} size={11} /> {ROLE_NAMES[role]} 1v1
-        {!ours && state !== "visited" && state !== "here" && <span className="neg"> ✕</span>}
+      <span className={cx(styles.caption, forfeit && styles.forfeitText)}>
+        <RoleIcon role={role} size={11} /> {ROLE_NAMES[role]} {forfeit ? "forfeit" : "1v1"}
       </span>
       {marks}
     </button>

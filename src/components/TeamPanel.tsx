@@ -54,6 +54,14 @@ export function TeamPanel({ run, act, busy }: { run: RunView; act: ActFn; busy: 
         </span>
       </div>
 
+      {lineup.warnings.length > 0 && (
+        <ul className={styles.warnings}>
+          {lineup.warnings.map((w) => (
+            <li key={w}>{w}</li>
+          ))}
+        </ul>
+      )}
+
       <div className={styles.rows}>
         {ROLES.map((role) => {
           const unit = lineup.slots[role];
@@ -119,13 +127,6 @@ export function TeamPanel({ run, act, busy }: { run: RunView; act: ActFn; busy: 
 
       <SynergyList links={lineup.synergies} />
 
-      {lineup.warnings.length > 0 && (
-        <ul className={styles.warnings}>
-          {lineup.warnings.map((w) => (
-            <li key={w}>{w}</li>
-          ))}
-        </ul>
-      )}
       <p className={styles.hint}>
         {selected ? "Now click the role to swap with." : "Drag or click two rows to swap roles."}
       </p>

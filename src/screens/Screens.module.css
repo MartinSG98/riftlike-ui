@@ -50,10 +50,36 @@
 }
 
 .mapPanel {
+  position: relative;
+  isolation: isolate;
   padding: 8px 12px 18px;
   background:
     radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--teal) 6%, transparent), transparent 60%),
     linear-gradient(180deg, var(--surface-2), var(--surface));
+}
+
+/* A faint contour map under the nodes, so the day reads as a place and not a diagram. */
+.mapPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background:
+    repeating-radial-gradient(
+      ellipse at 24% 30%,
+      transparent 0 34px,
+      color-mix(in srgb, var(--line-strong) 60%, transparent) 34px 35px
+    ),
+    repeating-radial-gradient(
+      ellipse at 78% 74%,
+      transparent 0 42px,
+      color-mix(in srgb, var(--line-strong) 45%, transparent) 42px 43px
+    );
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000, transparent 72%);
+  mask-image: radial-gradient(ellipse at 50% 50%, #000, transparent 72%);
+  opacity: 0.4;
+  pointer-events: none;
 }
 
 .ready {
