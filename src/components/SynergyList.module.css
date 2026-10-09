@@ -1,0 +1,98 @@
+.box {
+  display: grid;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 10px 10px 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(3, 7, 12, 0.45);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.them .title {
+  color: var(--red);
+}
+
+.count {
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  color: var(--text-dim);
+  letter-spacing: 0;
+}
+
+.none {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.list {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1px 10px;
+  padding: 5px 8px;
+  border-left: 2px solid var(--teal);
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--teal) 7%, transparent);
+}
+
+.them .link {
+  border-left-color: var(--red);
+  background: color-mix(in srgb, var(--red) 7%, transparent);
+}
+
+.bad {
+  border-left-color: var(--text-muted);
+}
+
+.pair {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.pair b {
+  color: var(--text);
+}
+
+.plus {
+  margin: 0 2px;
+  color: var(--text-muted);
+}
+
+.name {
+  grid-column: 1;
+  font-size: 11.5px;
+  color: var(--text-dim);
+}
+
+.value {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  font-size: 12.5px;
+  font-weight: 800;
+  white-space: nowrap;
+}

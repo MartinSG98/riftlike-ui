@@ -201,8 +201,8 @@ function commentary(r: FightResult, beat: Beat, ourBase: number, theirBase: numb
     case "intro":
       return (
         <>
-          A lane fight: <b>base</b> power, then <b>bonuses</b>, then the <b>lane matchup</b>. Higher power wins the lane
-          and the most XP.
+          A lane fight: <b>base</b> power, then <b>bonuses</b>, then the <b>lane matchup</b>. Higher power wins the
+          lane. Only the champion who fights earns XP, more for a win.
         </>
       );
     case "baseUs":

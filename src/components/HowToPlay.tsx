@@ -23,7 +23,8 @@ export function HowToPlay({ onClose }: { onClose: () => void }) {
         </p>
         <p>
           <b>Match days.</b> Each Play-In, Swiss and Quarterfinal day is a map. Walk from the top down to the match at
-          the bottom. A lane fight puts your champion in that role against an enemy for XP. A pick offers three
+          the bottom. A lane fight puts your champion in that role against an enemy, and only that champion earns the
+          XP. Matches level the whole team. A pick offers three
           champions: take one into any role, or skip. The Semifinal and Final have no map. Everyone is raised to level
           17 (Final: 18) and you get three picks in a row.
         </p>
@@ -39,7 +40,10 @@ export function HowToPlay({ onClose }: { onClose: () => void }) {
         </p>
         <p>
           <b>Synergy.</b> Some duos give each other power: triple for the bot lane pair, double for jungle and mid,
-          single anywhere else. A team that is all AD or all AP loses 3 on every champion.
+          single anywhere else. Known duos like Xayah and Rakan count the most. Types that work together count too,
+          for example a late marksman with an enchanter, an early marksman with an engage support, or a jungle tank
+          with a mid mage. Your active synergies are listed under the roster. A team that is all AD or all AP loses 3
+          on every champion.
         </p>
         <p>
           <b>Matches.</b> Lanes clash from top to bottom, and a champion that counters its lane opponent gets a small

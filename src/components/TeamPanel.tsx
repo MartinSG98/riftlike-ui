@@ -7,6 +7,7 @@ import { PlayerAvatar, PowerBox, TeamBadge } from "./Badges";
 import { ChampCrest } from "./ChampCrest";
 import { RoleIcon } from "./Icons";
 import { RosterModal } from "./RosterModal";
+import { SynergyList } from "./SynergyList";
 import styles from "./TeamPanel.module.css";
 
 /** The roster sidebar. Drag a row onto another, or click two rows, to swap roles. */
@@ -115,6 +116,8 @@ export function TeamPanel({ run, act, busy }: { run: RunView; act: ActFn; busy: 
           );
         })}
       </div>
+
+      <SynergyList links={lineup.synergies} />
 
       {lineup.warnings.length > 0 && (
         <ul className={styles.warnings}>
