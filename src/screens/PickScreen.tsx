@@ -5,8 +5,10 @@ import { PowerBox } from "../components/Badges";
 import { ChampCard } from "../components/ChampCard";
 import { ChampCrest } from "../components/ChampCrest";
 import { RoleIcon } from "../components/Icons";
+import { RosterModal } from "../components/RosterModal";
 import { cx, ROLE_NAMES, ROLES, signed } from "../lib/format";
 import { useCatalog, useTeam } from "../state/catalog";
+import { MapScreen } from "./MapScreen";
 import styles from "./Screens.module.css";
 
 export function PickScreen({ run, act, busy }: { run: RunView; act: ActFn; busy: boolean }) {
@@ -16,6 +18,26 @@ export function PickScreen({ run, act, busy }: { run: RunView; act: ActFn; busy:
   const { champions } = useCatalog();
   const preview = run.offers.find((o) => o.champ === (placing ?? hover)) ?? null;
   const drafting = pending.draft_left > 0;
+  // Looking around keeps this screen mounted, so the offers and a half-made pick survive the trip.
+  const [peek, setPeek] = useState(false);
+  const [roster, setRoster] = useState(false);
+
+  if (peek) {
+    return (
+      <>
+        <div className={styles.pickBanner} role="status">
+          <span>
+            <b>Pick waiting.</b> {run.offers.length} champions on offer
+            {drafting ? `, draft pick ${4 - pending.draft_left} of 3` : ""}. Roles can still be swapped here.
+          </span>
+          <button type="button" className="btn btn-primary btn-small" onClick={() => setPeek(false)}>
+            Back to the pick
+          </button>
+        </div>
+        <MapScreen run={run} act={act} busy={busy} waitingPick />
+      </>
+    );
+  }
 
   return (
     <main className="page">
@@ -26,6 +48,15 @@ export function PickScreen({ run, act, busy }: { run: RunView; act: ActFn; busy:
       <p className="lead center">
         Hover a champion to see where it fits best. Pick one, then choose its role. Level {pending.level}.
       </p>
+      <div className={styles.pickToolbar}>
+        <button type="button" className="btn btn-ghost btn-small" onClick={() => setPeek(true)}>
+          View map and roster
+        </button>
+        <button type="button" className="btn btn-ghost btn-small" onClick={() => setRoster(true)}>
+          Roster and counters
+        </button>
+      </div>
+      {roster && <RosterModal run={run} side="us" onClose={() => setRoster(false)} />}
 
       <div className={styles.cards}>
         {run.offers.map((offer) => (
