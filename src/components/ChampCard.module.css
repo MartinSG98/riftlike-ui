@@ -36,6 +36,20 @@
   font-weight: 800;
 }
 
+/* ---------- banner: name on the left, the deciding number on the right ---------- */
+
+.bannerFoot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.title {
+  display: grid;
+  min-width: 0;
+}
+
 .name {
   font-family: var(--font-display);
   font-variant: small-caps;
@@ -52,37 +66,127 @@
   color: var(--text-dim);
 }
 
-.stats {
+.headline {
   display: grid;
-  gap: 10px;
-  margin: 0;
-  padding: 14px 16px 6px;
+  justify-items: end;
+  flex: none;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
 }
 
-.stats > div {
-  display: flex;
+.bigPower {
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 0.95;
+  color: var(--text);
+}
+
+.headCaption {
+  display: inline-flex;
   align-items: center;
+  gap: 3px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-dim);
+}
+
+/* ---------- team gain ---------- */
+
+.gainRow {
+  display: flex;
+  align-items: baseline;
   justify-content: space-between;
   gap: 12px;
-  min-height: 26px;
-}
-
-.stats dt {
+  padding: 10px 16px 0;
   font-size: 13px;
   color: var(--text-muted);
 }
 
-.stats dd {
-  margin: 0;
-  font-weight: 700;
+.gainRow b {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.gain {
+  color: var(--green);
+}
+
+.loss {
+  color: var(--red);
+}
+
+.flat {
+  color: var(--text-dim);
+}
+
+/* ---------- bonuses ---------- */
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px 16px 0;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-dim);
+}
+
+.chip b {
+  font-weight: 800;
+}
+
+.chipGain {
+  border-color: color-mix(in srgb, var(--green) 50%, transparent);
+  background: color-mix(in srgb, var(--green) 10%, transparent);
+}
+
+.chipGain b {
+  color: var(--green);
+}
+
+.chipLoss {
+  border-color: color-mix(in srgb, var(--red) 50%, transparent);
+  background: color-mix(in srgb, var(--red) 10%, transparent);
+}
+
+.chipLoss b {
+  color: var(--red);
+}
+
+.noBonus {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ---------- focus and roles, last ---------- */
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 12px 16px 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
 }
 
 .roles {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
   gap: 10px;
-  font-size: 13px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-muted);
 }
 
 .roles span {
@@ -91,58 +195,7 @@
   gap: 4px;
 }
 
-.block {
-  display: grid;
-  gap: 6px;
-  margin: 8px 16px 0;
-  padding-top: 10px;
-  border-top: 1px solid var(--line);
-}
-
-.blockTitle {
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.line {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.synergyLine {
-  margin: 0 -8px;
-  padding: 5px 8px;
-  border: 1px solid color-mix(in srgb, var(--teal) 45%, transparent);
-  border-radius: var(--radius);
-  background: color-mix(in srgb, var(--teal) 8%, transparent);
-}
-
-.lineRole {
-  flex: none;
-  color: var(--teal);
-}
-
-.lineText {
-  display: grid;
-  flex: 1;
-  line-height: 1.2;
-}
-
-.lineText b {
-  font-size: 13.5px;
-}
-
-.lineText small {
-  font-size: 11.5px;
-  color: var(--text-muted);
-}
-
-.gold {
-  color: var(--gold);
-}
-
 .action {
   margin-top: auto;
-  padding: 16px;
+  padding: 14px 16px 16px;
 }

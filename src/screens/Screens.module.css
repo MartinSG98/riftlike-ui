@@ -223,6 +223,15 @@
   letter-spacing: 0.06em;
 }
 
+/* Small crests of the offers that fit this role best. */
+.fits {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  gap: 2px;
+}
+
 .slotRole {
   display: inline-flex;
   align-items: center;
