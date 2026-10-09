@@ -35,8 +35,9 @@ export function HowToPlay({ onClose }: { onClose: () => void }) {
           champion loses 6. Drag a roster row onto another, or click two rows, to swap roles.
         </p>
         <p>
-          <b>Signatures.</b> Each player has five comfort champions worth +5 down to +1 when that player plays one in
-          their own role. Opponents get theirs too.
+          <b>Signatures.</b> Each player's signature champions are the ten they have played most in their pro career,
+          in their role. The most played is worth +5, then +4, +3, +3, +2, +2 and +1 for the last four, when that
+          player plays it in their own role. Opponents get theirs too.
         </p>
         <p>
           <b>Synergy.</b> Some duos give each other power: triple for the bot lane pair, double for jungle and mid,
@@ -46,8 +47,9 @@ export function HowToPlay({ onClose }: { onClose: () => void }) {
           on every champion.
         </p>
         <p>
-          <b>Matches.</b> Lanes clash from top to bottom, and a champion that counters its lane opponent gets a small
-          bonus. The stronger side wins the clash and carries what it has left into the next enemy. Whoever has power
+          <b>Matches.</b> Lanes clash from top to bottom, and a champion that counters its lane opponent gets up to
+          +5 on top of its bonuses: early champions beat late ones in lane, fighters beat tanks, assassins beat mages,
+          and ranged beats melee. The stronger side wins the clash and carries what it has left into the next enemy. Whoever has power
           left at the end wins, so the sum of your five champions is what counts. An empty role is worth nothing. The
           Roster and Scout buttons show every champion's counters and who counters them.
         </p>

@@ -68,6 +68,11 @@ export function RosterModal({ run, side: initialSide, onClose }: { run: RunView;
     setRole(firstFilled(next === "us" ? run.lineup : opp?.lineup));
   };
 
+  const rivalEntry = rival && matchups
+    ? (matchups.counters.find((c) => c.champ === rival.champ) ?? matchups.countered_by.find((c) => c.champ === rival.champ))
+    : undefined;
+  const rivalNote = rivalEntry?.note ?? "";
+
   const vsRival =
     rival && matchups
       ? (matchups.counters.find((c) => c.champ === rival.champ)?.value ??
@@ -196,6 +201,7 @@ export function RosterModal({ run, side: initialSide, onClose }: { run: RunView;
                           : "Even lane"}
                     </span>
                   )}
+                  {rivalNote && <span className={styles.rivalNote}>{rivalNote}</span>}
                 </div>
               )}
 
@@ -270,7 +276,10 @@ function MatchupList({
           {entries.map((e) => (
             <li key={e.champ} className={cx(styles.matchup, e.champ === highlight && styles.highlight)}>
               <ChampCrest champ={e.champ} size="xs" />
-              <span className={styles.matchupName}>{e.champ}</span>
+              <span className={styles.matchupName}>
+                {e.champ}
+                {e.note && <small>{e.note}</small>}
+              </span>
               <b className={tone === "good" ? styles.goodValue : styles.badValue}>+{e.value}</b>
             </li>
           ))}
