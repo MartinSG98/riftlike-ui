@@ -23,6 +23,11 @@ export function iconUrl(name: string): string {
   return `${BASE}/icons/${artId(name)}.png`;
 }
 
+/** A team's logo in public/teams, named after its tag, e.g. "GEN" -> teams/GEN.png. */
+export function logoUrl(code: string): string {
+  return `${import.meta.env.BASE_URL}teams/${code}.png`;
+}
+
 /** Wide default splash. */
 export function splashUrl(name: string): string {
   return `${BASE}/splash/${artId(name)}_0.jpg`;

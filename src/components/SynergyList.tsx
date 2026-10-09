@@ -28,7 +28,7 @@ export function SynergyList({ links, tone = "us" }: { links: SynergyLink[]; tone
                 <b>{link.champs[1]}</b>
               </span>
               <span className={styles.name}>{link.archetype ?? (link.value < 0 ? "Bad duo" : "Known duo")}</span>
-              <span className={cx(styles.value, link.value > 0 ? "pos" : "neg")}>{signed(link.value)} each</span>
+              <span className={cx(styles.value, link.value > 0 ? "gain" : "loss")}>{signed(link.value)} each</span>
             </li>
           ))}
         </ul>

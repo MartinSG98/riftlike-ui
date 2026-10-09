@@ -7,7 +7,17 @@ import { RoleIcon } from "../components/Icons";
 import { PlaybackBar } from "../components/PlaybackBar";
 import { XpList } from "../components/XpList";
 import { cx, ROLE_NAMES, ROLES, signed } from "../lib/format";
-import { baseOf, bonusesOf, laneStates, matchBeats, type LaneState, type MatchBeat, type Side } from "../lib/playback";
+import {
+  baseOf,
+  bonusesOf,
+  laneStates,
+  laneStories,
+  matchBeats,
+  type LaneState,
+  type LaneStory,
+  type MatchBeat,
+  type Side,
+} from "../lib/playback";
 import { readSpeed, useTimeline, writeSpeed } from "../lib/useTimeline";
 import { useTeam } from "../state/catalog";
 import styles from "./Fight.module.css";
@@ -20,6 +30,9 @@ export function MatchScreen({ run, act, busy }: { run: RunView; act: ActFn; busy
   const beats = useMemo(() => matchBeats(r), [r]);
   const { index, done, progress, skip } = useTimeline(beats, speed);
   const states = laneStates(r, beats, done ? beats.length - 1 : index);
+  const stories = useMemo(() => laneStories(r), [r]);
+  const ourTotal = r.ours.reduce((sum, lane) => sum + lane.power, 0);
+  const theirTotal = r.theirs.reduce((sum, lane) => sum + lane.power, 0);
   const beat = beats[index];
   const showResult = done || beat.kind === "result";
 
@@ -67,27 +80,60 @@ export function MatchScreen({ run, act, busy }: { run: RunView; act: ActFn; busy
         <div className={styles.lanes}>
           {ROLES.map((role, i) => (
             <div key={role} className={cx(styles.lane, (focus("us", i) || focus("them", i)) && styles.laneFocus)}>
-              <SideCard lane={r.ours[i]} side="us" state={states.us[i]} focus={focus("us", i)} hit={clashHit("us", i)} beat={index} />
+              <SideCard
+                lane={r.ours[i]}
+                side="us"
+                state={states.us[i]}
+                story={done ? stories.us[i] : null}
+                focus={focus("us", i)}
+                hit={clashHit("us", i)}
+                beat={index}
+              />
               <span className={styles.laneRole} title={ROLE_NAMES[role]}>
                 <RoleIcon role={role} size={16} />
               </span>
-              <SideCard lane={r.theirs[i]} side="them" state={states.them[i]} focus={focus("them", i)} hit={clashHit("them", i)} beat={index} />
+              <SideCard
+                lane={r.theirs[i]}
+                side="them"
+                state={states.them[i]}
+                story={done ? stories.them[i] : null}
+                focus={focus("them", i)}
+                hit={clashHit("them", i)}
+                beat={index}
+              />
             </div>
           ))}
         </div>
 
-        <Commentary lines={lines} />
-
         {showResult && (
           <div className={styles.result}>
             <div className={cx(styles.verdict, !r.win && styles.loss)}>{r.win ? "Victory" : "Defeat"}</div>
+            {/* More total power always wins, so the gap in totals is the whole reason. */}
+            <p className={styles.reason}>
+              {r.win ? (
+                <>
+                  You won by <b className={styles.gain}>{ourTotal - theirTotal}</b> power, <b>{ourTotal}</b> against
+                  their <b>{theirTotal}</b>.
+                </>
+              ) : ourTotal === theirTotal ? (
+                <>
+                  Dead even at <b>{ourTotal}</b>, and a tie goes to {them.name}.
+                </>
+              ) : (
+                <>
+                  {them.name} won by <b className={styles.lossNum}>{theirTotal - ourTotal}</b> power,{" "}
+                  <b>{theirTotal}</b> against your <b>{ourTotal}</b>.
+                </>
+              )}
+            </p>
             <p className={styles.sub}>
-              {r.win ? `Won with ${r.left} power to spare.` : `${them.name} won with ${r.left} power to spare.`}{" "}
               <b>{r.next.label}</b>
             </p>
             <XpList gains={r.xp} />
           </div>
         )}
+
+        <Commentary lines={lines} collapsed={done} />
 
         <PlaybackBar
           progress={progress}
@@ -109,6 +155,7 @@ function SideCard({
   lane,
   side,
   state,
+  story,
   focus,
   hit,
   beat,
@@ -116,17 +163,29 @@ function SideCard({
   lane: LaneSide;
   side: Side;
   state: LaneState;
+  story: LaneStory | null; // set once playback is done
   focus: boolean;
   hit: number | null;
   beat: number;
 }) {
-  const shown = state.remaining ?? state.value;
+  // Once it is over every lane shows the power it brought, not the zero it ended on.
+  const shown = story ? lane.power : (state.remaining ?? state.value);
+  const standing = story && !story.fellTo && !story.tiedWith;
   return (
-    <div className={cx(styles.side, styles[side], focus && styles.sideFocus, state.fallen && styles.fallen)}>
+    <div
+      className={cx(
+        styles.side,
+        styles[side],
+        focus && styles.sideFocus,
+        !story && state.fallen && styles.fallen,
+        story && (standing ? styles.standing : styles.out),
+      )}
+    >
       <ChampCrest champ={lane.champ} size="sm" level={lane.level} />
       <span className={styles.sideText}>
         <b>{lane.champ ?? `No ${ROLE_NAMES[lane.role]}`}</b>
         <small>{lane.player}</small>
+        {story && <span className={styles.story}>{storyText(story, state.remaining ?? lane.power)}</span>}
         {(state.chips.length > 0 || state.counter > 0) && (
           <span className={styles.chips}>
             {state.chips.map((p, i) => (
@@ -141,7 +200,7 @@ function SideCard({
         <span key={`${shown}-${state.remaining !== null}`} className={cx(styles.number, shown !== null && styles.bump)}>
           {shown ?? "–"}
         </span>
-        {state.remaining !== null && !state.fallen && <small>left</small>}
+        {!story && state.remaining !== null && !state.fallen && <small>left</small>}
       </span>
       {hit !== null && (
         <span key={beat} aria-hidden="true">
@@ -161,23 +220,44 @@ function Chip({ part }: { part: PowerPart }) {
   );
 }
 
-function Commentary({ lines }: { lines: ReactNode[] }) {
+/** The play-by-play. It follows the newest line while playing and folds away once it is over. */
+function Commentary({ lines, collapsed }: { lines: ReactNode[]; collapsed: boolean }) {
   const box = useRef<HTMLOListElement>(null);
   // Jump, not smooth scroll: a new line can arrive before a smooth scroll finishes and cut it short.
   useLayoutEffect(() => {
-    if (box.current) box.current.scrollTop = box.current.scrollHeight;
-  }, [lines.length]);
-  return (
-    <ol className={styles.commentary} ref={box} aria-live="polite">
+    if (box.current && !collapsed) box.current.scrollTop = box.current.scrollHeight;
+  }, [lines.length, collapsed]);
+  const list = (
+    <ol className={styles.commentary} ref={box} aria-live={collapsed ? undefined : "polite"}>
       {lines.map((line, i) =>
         line ? (
-          <li key={i} className={cx(i === lines.length - 1 && styles.lineNow)}>
+          <li key={i} className={cx(!collapsed && i === lines.length - 1 && styles.lineNow)}>
             {line}
           </li>
         ) : null,
       )}
     </ol>
   );
+  if (!collapsed) return list;
+  return (
+    <details className={styles.log}>
+      <summary>Play by play</summary>
+      {list}
+    </details>
+  );
+}
+
+/** "Beat Gnar and Maokai, then fell to Orianna" and the like. */
+function storyText(story: LaneStory, left: number): string {
+  const beat =
+    story.beat.length > 1
+      ? `${story.beat.slice(0, -1).join(", ")} and ${story.beat[story.beat.length - 1]}`
+      : (story.beat[0] ?? "");
+  if (story.fellTo) return beat ? `Beat ${beat}, then fell to ${story.fellTo}` : `Fell to ${story.fellTo}`;
+  if (story.tiedWith) {
+    return beat ? `Beat ${beat}, then traded out with ${story.tiedWith}` : `Traded out with ${story.tiedWith}`;
+  }
+  return beat ? `Beat ${beat}, ${left} left` : "Never had to fight";
 }
 
 function name(lane: LaneSide): string {

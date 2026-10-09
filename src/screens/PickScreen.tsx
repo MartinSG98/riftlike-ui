@@ -142,6 +142,8 @@ function Slot({
   const isBest = preview?.best_role === role;
   const showPreview = preview && (placing || isBest);
   const proj = preview?.projections[role];
+  // Which offers fit best here, shown without a hover.
+  const fits = run.offers.filter((o) => o.best_role === role);
 
   return (
     <button
@@ -151,6 +153,13 @@ function Slot({
       onClick={onPlace}
     >
       {isBest && <span className={styles.inTag}>Best fit</span>}
+      {fits.length > 0 && !showPreview && (
+        <span className={styles.fits} title={`Best fit for ${fits.map((o) => o.champ).join(" and ")}`}>
+          {fits.map((o) => (
+            <ChampCrest key={o.champ} champ={o.champ} size="xs" />
+          ))}
+        </span>
+      )}
       <span className={styles.slotRole}>
         <RoleIcon role={role} size={12} /> {ROLE_NAMES[role]}
       </span>
@@ -163,7 +172,7 @@ function Slot({
       {showPreview && proj ? (
         <span className={styles.slotPower}>
           <PowerBox value={proj.power} size="sm" />
-          <span className={proj.delta > 0 ? "pos" : proj.delta < 0 ? "neg" : "muted"}>{signed(proj.delta)}</span>
+          <span className={proj.delta > 0 ? "gain" : proj.delta < 0 ? "loss" : "muted"}>{signed(proj.delta)}</span>
         </span>
       ) : line ? (
         <span className={styles.slotPower}>

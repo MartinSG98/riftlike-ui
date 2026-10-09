@@ -6,8 +6,9 @@ dist/
 dist-ssr/
 *.tsbuildinfo
 
-# Champion art from Data Dragon, downloaded locally (see README)
+# Champion art from Data Dragon and team logos, both added locally (see README)
 public/champions/
+public/teams/
 
 # Environment
 .env

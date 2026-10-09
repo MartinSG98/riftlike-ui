@@ -18,7 +18,7 @@
   stroke: var(--line);
   stroke-width: 1.2;
   stroke-dasharray: 2 6;
-  opacity: 0.5;
+  opacity: 0.25;
 }
 
 .edge.ahead {
@@ -38,9 +38,18 @@
 
 .edge.walked {
   stroke: var(--gold);
-  stroke-width: 3;
+  stroke-width: 3.5;
   stroke-dasharray: none;
+  stroke-linecap: round;
   opacity: 1;
+}
+
+/* A soft halo under the walked path, so your route is the line the eye follows. */
+.glow {
+  stroke: var(--gold);
+  stroke-width: 10;
+  stroke-linecap: round;
+  opacity: 0.18;
 }
 
 @keyframes flow {
@@ -172,7 +181,7 @@
 
 /* Not reachable any more from where you stand. */
 .node.gone {
-  opacity: 0.22;
+  opacity: 0.13;
   filter: grayscale(1);
 }
 
@@ -219,6 +228,59 @@
   color: var(--teal);
 }
 
+/* A pick while you have empty roles: it is the most valuable step on the map. */
+.pick.fills {
+  border: 2px solid var(--teal);
+  background: radial-gradient(circle, color-mix(in srgb, var(--teal) 22%, transparent), var(--bg-deep) 72%);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--teal) 35%, transparent);
+}
+
+.fills .plus {
+  color: var(--teal-bright);
+}
+
+.caption.fillTag {
+  padding: 1px 6px;
+  border: 1px solid color-mix(in srgb, var(--teal) 55%, transparent);
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--teal) 16%, var(--bg-deep));
+  color: var(--teal-bright);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* A lane you cannot field: stepping here is a forfeit. */
+.node.forfeit,
+.node.forfeit.open {
+  border: 2px dashed var(--red);
+  box-shadow: none;
+  animation: none;
+}
+
+.forfeit .fightCrest {
+  opacity: 0.3;
+  filter: grayscale(1);
+}
+
+.forfeitMark {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--red);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+}
+
+.caption.forfeitText,
+.node.open .caption.forfeitText {
+  color: var(--red);
+}
+
 .fight {
   border-color: color-mix(in srgb, var(--gold) 50%, var(--line-strong));
 }
@@ -240,6 +302,7 @@
   font-weight: 800;
   line-height: 15px;
   text-align: center;
+  font-variant-numeric: tabular-nums;
 }
 
 .enemyBadge {
@@ -262,19 +325,83 @@
   white-space: nowrap;
 }
 
-.match {
-  width: 64px;
-  height: 64px;
-  border: 2px solid var(--red);
-  background: radial-gradient(circle, var(--red-deep), var(--bg-deep) 70%);
+/* ---------- the match: the day's destination ---------- */
+
+/* The arena floor the match banner stands in. */
+.arena {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: min(360px, 100%);
+  height: 128px;
+  border: 1px solid color-mix(in srgb, var(--red) 28%, transparent);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--red) 16%, transparent), transparent 70%);
+  box-shadow: 0 0 0 16px color-mix(in srgb, var(--red) 5%, transparent);
+  pointer-events: none;
 }
 
-.match.open {
-  border-color: var(--red);
+.node.match {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 236px;
+  height: 76px;
+  padding: 0 16px;
+  border: 2px solid var(--red);
+  border-radius: 12px 12px 28px 28px;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--red) 24%, transparent), transparent 80%),
+    var(--bg-deep);
+  color: var(--text);
+  text-align: left;
+}
+
+.node.match.open {
   box-shadow:
     0 0 0 5px color-mix(in srgb, var(--red) 14%, transparent),
     0 0 22px color-mix(in srgb, var(--red) 40%, transparent);
+  transform: translate(-50%, -50%);
   animation: pulseRed 1.8s ease-in-out infinite;
+}
+
+.node.match.open:hover {
+  transform: translate(-50%, -50%) scale(1.04);
+}
+
+.matchText {
+  display: grid;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.matchText > b {
+  overflow: hidden;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.matchText > span:last-child {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.matchEyebrow {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.open .matchEyebrow {
+  color: var(--teal-bright);
+}
+
+.matchPower {
+  font-size: 15px;
+  color: var(--red);
+  font-variant-numeric: tabular-nums;
 }
 
 @keyframes pulse {
@@ -350,7 +477,7 @@
 }
 
 .swGone {
-  opacity: 0.3;
+  opacity: 0.15;
 }
 
 @media (prefers-reduced-motion: reduce) {

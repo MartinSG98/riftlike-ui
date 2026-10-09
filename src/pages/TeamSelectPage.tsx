@@ -9,6 +9,16 @@ import { saveRunId } from "../lib/savedRun";
 import { useCatalog } from "../state/catalog";
 import styles from "./Pages.module.css";
 
+const ROAD: [string, string][] = [
+  ["Play-In", "Four teams, double elimination. Only the winner joins the Swiss stage."],
+  ["Swiss stage", "Three wins reach the Quarterfinals. Three losses end the run."],
+  ["Quarterfinals", "One more match day on a map. From here one loss and you are out."],
+  ["Semifinal", "No map. Three picks in a row, then the match."],
+  ["Final", "The same again, for the trophy."],
+];
+
+const ordinal = (n: number) => `${n}${n === 1 ? "st" : n === 2 ? "nd" : n === 3 ? "rd" : "th"}`;
+
 export function TeamSelectPage() {
   const { teams, leagues } = useCatalog();
   const navigate = useNavigate();
@@ -59,17 +69,34 @@ export function TeamSelectPage() {
                     disabled={busy !== null}
                     onClick={() => start(t.code)}
                   >
+                    <span className={styles.seedMark} aria-hidden="true">
+                      {t.seed}
+                    </span>
                     {t.play_in && <span className={styles.playIn}>Play-In</span>}
                     <TeamBadge code={t.code} size="lg" />
                     <span className={styles.teamName}>{t.name}</span>
                     <span className={styles.teamSeed}>
-                      {league.code} #{t.seed}
+                      {league.code} {ordinal(t.seed)} seed
                     </span>
                   </button>
                 ))}
             </div>
           ))}
         </div>
+
+        <section className={styles.road} aria-labelledby="road-title">
+          <p id="road-title" className="eyebrow center">
+            The road to the trophy
+          </p>
+          <ol>
+            {ROAD.map(([stage, text]) => (
+              <li key={stage}>
+                <b>{stage}</b>
+                <span>{text}</span>
+              </li>
+            ))}
+          </ol>
+        </section>
       </main>
     </>
   );

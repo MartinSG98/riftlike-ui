@@ -175,15 +175,18 @@
 }
 
 .counterUs {
-  border-color: var(--teal);
-  background: var(--teal-deep);
+  border-color: var(--green);
+  background: color-mix(in srgb, var(--green) 14%, var(--bg-deep));
 }
 
 .margin {
   font-size: 13px;
   font-weight: 700;
-  color: var(--teal);
   animation: pop 0.3s ease 0.9s backwards;
+}
+
+.marginEven {
+  color: var(--text-dim);
 }
 
 /* ---------- match lanes ---------- */
@@ -292,6 +295,32 @@
   filter: grayscale(0.9);
 }
 
+/* ---------- match over: what every lane did ---------- */
+
+.standing {
+  border-color: color-mix(in srgb, var(--gold) 60%, var(--line));
+  box-shadow: inset 0 0 18px color-mix(in srgb, var(--gold) 10%, transparent);
+}
+
+.out {
+  opacity: 0.75;
+}
+
+.out .sidePower {
+  color: var(--text-dim);
+}
+
+.story {
+  margin-top: 2px;
+  font-size: 11.5px;
+  line-height: 1.3;
+  color: var(--text-dim);
+}
+
+.standing .story {
+  color: var(--gold-bright);
+}
+
 .shake {
   animation: shake 0.45s ease 0.8s;
 }
@@ -349,14 +378,15 @@
   justify-content: flex-end;
 }
 
+/* A bonus on a lane card. Gains are green, losses the opponent color. */
 .chip {
   padding: 1px 6px;
-  border: 1px solid var(--gold-deep);
+  border: 1px solid color-mix(in srgb, var(--green) 50%, transparent);
   border-radius: 2px;
-  background: color-mix(in srgb, var(--gold) 10%, transparent);
+  background: color-mix(in srgb, var(--green) 10%, transparent);
   font-size: 11px;
   font-weight: 700;
-  color: var(--gold-bright);
+  color: var(--text-dim);
   animation: pop 0.3s ease;
 }
 
@@ -367,9 +397,9 @@
 }
 
 .chipCounter {
-  border-color: var(--teal);
-  background: var(--teal-deep);
-  color: var(--teal-bright);
+  border-color: var(--green);
+  background: color-mix(in srgb, var(--green) 16%, transparent);
+  color: var(--text);
 }
 
 @keyframes pop {
@@ -515,10 +545,69 @@
   background-clip: text;
 }
 
+.reason {
+  margin: 0 0 6px;
+  text-align: center;
+  font-size: 18px;
+  color: var(--text);
+}
+
+.reason b {
+  font-variant-numeric: tabular-nums;
+}
+
+.gain {
+  color: var(--green);
+}
+
+.lossNum {
+  color: var(--red);
+}
+
 .sub {
   margin: 0 0 18px;
   text-align: center;
   color: var(--text-dim);
+}
+
+/* The play-by-play, folded away once the match is over. */
+.log {
+  margin-top: 16px;
+}
+
+.log summary {
+  width: max-content;
+  margin: 0 auto;
+  padding: 4px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  list-style: none;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.log summary::-webkit-details-marker {
+  display: none;
+}
+
+.log summary:hover,
+.log[open] summary {
+  border-color: var(--line-strong);
+  color: var(--text-dim);
+}
+
+.log .commentary {
+  height: auto;
+  max-height: 280px;
+  margin-top: 10px;
+}
+
+.log .commentary li {
+  animation: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

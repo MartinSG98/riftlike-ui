@@ -23,7 +23,7 @@ The current look works and the next pass should evolve it, not replace it.
 
 Champions use the official art from Riot's Data Dragon, under Riot's fan project policy (see [ADR 0006](../adr/0006-official-champion-art.md)). Each crest is the champion's square portrait in a rounded square, with a ring in the color of the champion's focus (early, mid or late game) and a level badge in the corner. Card banners show the champion's splash art, faded into the card body so the name stays readable. When an image is missing, the crest falls back to a generated geometric emblem on a tinted square with the initials, so the design has to work for that case as well.
 
-Nothing else comes from Riot Games or the teams: no team logos and no player photos. Teams are their short tag (GEN, T1, BLG, TLAW...) on a badge in the team color. Players are their initials in a circle.
+Teams show their logo on a badge in the team color when the logo file is there, and their short tag (GEN, T1, BLG, TLAW...) otherwise (see [ADR 0007](../adr/0007-team-logos.md)). There are no player photos.
 
 The design is welcome to restyle the crest frame, the badges and the banner completely. Please design crest sizes from 22px (inline lists) to about 92px (detail views), and a wide banner variant for the top of champion cards.
 

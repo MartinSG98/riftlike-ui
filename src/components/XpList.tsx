@@ -13,7 +13,7 @@ export function XpList({ gains }: { gains: XpGain[] }) {
             <b>{g.champ}</b>
             <small>
               Level {g.before}
-              {g.after > g.before ? <span className="pos"> → {g.after}</span> : null}
+              {g.after > g.before ? <span className="gain"> → {g.after}</span> : null}
             </small>
           </span>
           <span className={styles.xp}>+{g.gained} XP</span>

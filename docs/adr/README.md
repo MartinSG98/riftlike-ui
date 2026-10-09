@@ -11,4 +11,5 @@ Each record answers three questions. What was the situation, what did we decide,
 | [0003](0003-css-only-playback-animations.md) | CSS-only playback animations | Superseded by 0005 |
 | [0004](0004-a-generated-emblem-per-champion.md) | A generated emblem per champion | Accepted, partially superseded by 0006 |
 | [0005](0005-step-by-step-playback-on-a-timeline.md) | Step by step playback on a timeline | Accepted |
-| [0006](0006-official-champion-art.md) | Official champion art | Accepted |
+| [0006](0006-official-champion-art.md) | Official champion art | Accepted, partially superseded by 0007 |
+| [0007](0007-team-logos.md) | Team logos | Accepted |

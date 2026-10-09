@@ -54,7 +54,7 @@ export function EndScreen({ run }: { run: RunView }) {
               <span className={styles.historyOpp}>
                 <TeamBadge code={m.opponent} size="sm" /> {m.opponent}
               </span>
-              <b className={m.win ? "pos" : "neg"}>{m.win ? "Win" : "Loss"}</b>
+              <b className={m.win ? "gain" : "loss"}>{m.win ? "Win" : "Loss"}</b>
             </li>
           ))}
         </ol>
