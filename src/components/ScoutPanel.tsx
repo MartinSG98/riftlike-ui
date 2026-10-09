@@ -3,7 +3,7 @@ import { useState } from "react";
 import type { RunView } from "../api/types";
 import { cx, ROLES } from "../lib/format";
 import { useTeam } from "../state/catalog";
-import { PlayerAvatar, PowerBox, TeamBadge } from "./Badges";
+import { PowerBox, TeamBadge } from "./Badges";
 import { ChampCrest } from "./ChampCrest";
 import { RoleIcon } from "./Icons";
 import { RosterModal } from "./RosterModal";
@@ -40,17 +40,15 @@ export function ScoutPanel({ run }: { run: RunView }) {
         {ROLES.map((role) => {
           const unit = opp.lineup.slots[role]!;
           const line = opp.lineup.power[role];
-          const sig = line?.parts.find((p) => p.kind === "signature")?.value;
           return (
             <div key={role} className={styles.row}>
               <RoleIcon role={role} className={styles.role} />
-              <PlayerAvatar name={team.players[role]} bonus={sig} />
               <ChampCrest champ={unit.champ} size="sm" level={unit.level} />
               <span className={styles.names}>
                 <b>{unit.champ}</b>
                 <small>{team.players[role]}</small>
               </span>
-              <PowerBox line={line} tone="them" size="sm" />
+              <PowerBox line={line} tone="them" size="sm" showBonus />
             </div>
           );
         })}

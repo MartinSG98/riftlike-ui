@@ -1,9 +1,9 @@
 import { useState } from "react";
 
 import type { ActFn, Role, RunView } from "../api/types";
-import { cx, hue, ROLES, signed, vars } from "../lib/format";
+import { cx, hue, ROLES, vars } from "../lib/format";
 import { useTeam } from "../state/catalog";
-import { PlayerAvatar, PowerBox, TeamBadge } from "./Badges";
+import { PowerBox, TeamBadge } from "./Badges";
 import { ChampCrest } from "./ChampCrest";
 import { RoleIcon } from "./Icons";
 import { RosterModal } from "./RosterModal";
@@ -67,7 +67,6 @@ export function TeamPanel({ run, act, busy }: { run: RunView; act: ActFn; busy: 
           const unit = lineup.slots[role];
           const line = lineup.power[role];
           const player = team.players[role];
-          const sig = line?.parts.find((p) => p.kind === "signature")?.value;
           return (
             <div
               key={role}
@@ -101,20 +100,12 @@ export function TeamPanel({ run, act, busy }: { run: RunView; act: ActFn; busy: 
               aria-pressed={selected === role}
             >
               <RoleIcon role={role} className={styles.role} />
-              <PlayerAvatar name={player} bonus={sig} />
               <ChampCrest champ={unit?.champ ?? null} size="sm" level={unit?.level} />
               <span className={styles.names}>
                 <b className={unit ? undefined : styles.emptyName}>{unit ? unit.champ : "No champion yet"}</b>
                 <small>{player}</small>
               </span>
-              {line && (
-                <span className={styles.power}>
-                  <PowerBox line={line} size="sm" />
-                  {line.bonus !== 0 && (
-                    <span className={line.bonus > 0 ? "pos" : "neg"}>{signed(line.bonus)}</span>
-                  )}
-                </span>
-              )}
+              {line && <PowerBox line={line} size="sm" showBonus />}
               {unit && (
                 <span className={styles.xp} title={`${unit.xp} / 1000 XP`}>
                   <span style={{ width: `${unit.xp / 10}%` }} />

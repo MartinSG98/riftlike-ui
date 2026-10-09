@@ -16,35 +16,36 @@ export function TeamBadge({ code, size = "md" }: { code: string; size?: "sm" | "
   );
 }
 
-export function PlayerAvatar({ name, bonus }: { name: string; bonus?: number }) {
-  return (
-    <span className={styles.player} title={name}>
-      {name.replace(/[^A-Za-z0-9]/g, "").slice(0, 2).toUpperCase()}
-      {bonus ? <span className={styles.sigBonus}>+{bonus}</span> : null}
-    </span>
-  );
-}
-
 export function FocusChip({ focus }: { focus: Focus }) {
   return <span className={cx(styles.focus, styles[focus])}>{capitalize(focus)} game</span>;
 }
 
-/** A power number. With a line it explains itself on hover or focus. */
+/**
+ * A power number. With a line it explains itself on hover or focus, and with `showBonus` it
+ * carries the sum of its bonuses under the total.
+ */
 export function PowerBox({
   line,
   value,
   tone = "us",
   size = "md",
+  showBonus,
 }: {
   line?: PowerLine | null;
   value?: number;
   tone?: "us" | "them" | "plain";
   size?: "sm" | "md" | "lg";
+  showBonus?: boolean;
 }) {
   const total = value ?? line?.total ?? 0;
+  const bonus = showBonus && line && line.bonus !== 0 ? line.bonus : null;
   return (
-    <span className={cx(styles.power, styles[tone], styles[size])} tabIndex={line ? 0 : undefined}>
+    <span
+      className={cx(styles.power, styles[tone], styles[size], bonus !== null && styles.withBonus)}
+      tabIndex={line ? 0 : undefined}
+    >
       {total}
+      {bonus !== null && <small className={bonus > 0 ? styles.bonusUp : styles.bonusDown}>{signed(bonus)}</small>}
       {line && (
         <span className={styles.tip} role="tooltip">
           {line.parts.map((part, i) => (

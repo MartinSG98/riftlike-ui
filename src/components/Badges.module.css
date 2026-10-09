@@ -56,37 +56,6 @@
   font-size: 19px;
 }
 
-/* ---------- player avatar ---------- */
-
-.player {
-  position: relative;
-  display: inline-grid;
-  place-items: center;
-  flex: none;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: linear-gradient(160deg, var(--surface-3), var(--bg-deep));
-  border: 1px solid var(--line-strong);
-  color: var(--text-dim);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.03em;
-}
-
-.sigBonus {
-  position: absolute;
-  left: -4px;
-  bottom: -5px;
-  padding: 0 3px;
-  border-radius: 3px;
-  background: var(--gold);
-  color: var(--gold-ink);
-  font-size: 9px;
-  font-weight: 800;
-  line-height: 14px;
-}
-
 /* ---------- focus chip ---------- */
 
 .focus {
@@ -148,6 +117,26 @@
   min-width: 64px;
   height: 52px;
   font-size: 30px;
+}
+
+/* The total with its bonus underneath, for the roster rows. */
+.withBonus {
+  height: auto;
+  padding: 3px 6px 2px;
+  line-height: 1.05;
+}
+
+.withBonus small {
+  font-size: 10.5px;
+  font-weight: 800;
+}
+
+.bonusUp {
+  color: var(--green);
+}
+
+.bonusDown {
+  color: var(--red);
 }
 
 .tip {
