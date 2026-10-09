@@ -220,3 +220,21 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* Every step of a run fades in, so moving from the map into a fight reads as one flow. Opacity
+   only, so the sticky panels do not slide while it runs. */
+.step {
+  animation: stepIn 0.22s ease-out;
+}
+
+@keyframes stepIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step {
+    animation: none;
+  }
+}

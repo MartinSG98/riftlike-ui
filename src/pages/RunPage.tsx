@@ -92,7 +92,7 @@ export function RunPage() {
           {error}
         </p>
       )}
-      <div key={stepKey}>
+      <div key={stepKey} className={styles.step}>
         {screen === "first" && <FirstPickScreen {...props} />}
         {screen === "map" && <MapScreen {...props} />}
         {screen === "pick" && <PickScreen {...props} />}
