@@ -263,9 +263,9 @@
 }
 
 .good {
-  border-color: var(--teal);
-  background: var(--teal-deep);
-  color: var(--teal-bright);
+  border-color: var(--green);
+  background: color-mix(in srgb, var(--green) 14%, var(--bg-deep));
+  color: var(--text);
 }
 
 .bad {
@@ -335,7 +335,7 @@
 }
 
 .goodValue {
-  color: var(--teal);
+  color: var(--green);
 }
 
 .badValue {

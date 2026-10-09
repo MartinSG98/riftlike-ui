@@ -162,7 +162,7 @@ export function RosterModal({ run, side: initialSide, onClose }: { run: RunView;
                   <div className={styles.heroPower}>
                     <PowerBox line={line} tone={side === "us" ? "us" : "them"} size="lg" />
                     {line.bonus !== 0 && (
-                      <span className={line.bonus > 0 ? "pos" : "neg"}>{signed(line.bonus)} bonus</span>
+                      <span className={line.bonus > 0 ? "gain" : "loss"}>{signed(line.bonus)} bonus</span>
                     )}
                   </div>
                 )}
@@ -175,7 +175,7 @@ export function RosterModal({ run, side: initialSide, onClose }: { run: RunView;
                   {line.parts.map((p, i) => (
                     <div key={i}>
                       <dt>{p.label}</dt>
-                      <dd className={p.kind === "level" ? undefined : p.value >= 0 ? "pos" : "neg"}>
+                      <dd className={p.kind === "level" ? undefined : p.value >= 0 ? "gain" : "loss"}>
                         {p.kind === "level" ? p.value : signed(p.value)}
                       </dd>
                     </div>

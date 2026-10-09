@@ -175,15 +175,18 @@
 }
 
 .counterUs {
-  border-color: var(--teal);
-  background: var(--teal-deep);
+  border-color: var(--green);
+  background: color-mix(in srgb, var(--green) 14%, var(--bg-deep));
 }
 
 .margin {
   font-size: 13px;
   font-weight: 700;
-  color: var(--teal);
   animation: pop 0.3s ease 0.9s backwards;
+}
+
+.marginEven {
+  color: var(--text-dim);
 }
 
 /* ---------- match lanes ---------- */
@@ -375,14 +378,15 @@
   justify-content: flex-end;
 }
 
+/* A bonus on a lane card. Gains are green, losses the opponent color. */
 .chip {
   padding: 1px 6px;
-  border: 1px solid var(--gold-deep);
+  border: 1px solid color-mix(in srgb, var(--green) 50%, transparent);
   border-radius: 2px;
-  background: color-mix(in srgb, var(--gold) 10%, transparent);
+  background: color-mix(in srgb, var(--green) 10%, transparent);
   font-size: 11px;
   font-weight: 700;
-  color: var(--gold-bright);
+  color: var(--text-dim);
   animation: pop 0.3s ease;
 }
 
@@ -393,9 +397,9 @@
 }
 
 .chipCounter {
-  border-color: var(--teal);
-  background: var(--teal-deep);
-  color: var(--teal-bright);
+  border-color: var(--green);
+  background: color-mix(in srgb, var(--green) 16%, transparent);
+  color: var(--text);
 }
 
 @keyframes pop {

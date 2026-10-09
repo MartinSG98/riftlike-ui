@@ -105,7 +105,16 @@ export function FightScreen({ run, act, busy }: { run: RunView; act: ActFn; busy
               {clashed && <span className={styles.spark} style={{ left: `${share * 100}%` }} />}
             </div>
             {counter && <span className={cx(styles.counter, r.matchup > 0 && styles.counterUs)}>{counter}</span>}
-            {clashed && <span className={styles.margin}>{margin}</span>}
+            {clashed && (
+              <span
+                className={cx(
+                  styles.margin,
+                  r.outcome === "win" ? "gain" : r.outcome === "draw" ? styles.marginEven : "loss",
+                )}
+              >
+                {margin}
+              </span>
+            )}
           </div>
           <Fighter
             side="them"

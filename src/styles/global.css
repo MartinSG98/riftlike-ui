@@ -79,11 +79,21 @@ h3 {
   color: var(--text-muted);
 }
 
+/* Sides: us in the player color, them in the opponent color. Used for names. */
 .pos {
   color: var(--teal);
 }
 
 .neg {
+  color: var(--red);
+}
+
+/* Numbers: every gain is green and every loss is the opponent color. */
+.gain {
+  color: var(--green);
+}
+
+.loss {
   color: var(--red);
 }
 

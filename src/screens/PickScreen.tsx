@@ -172,7 +172,7 @@ function Slot({
       {showPreview && proj ? (
         <span className={styles.slotPower}>
           <PowerBox value={proj.power} size="sm" />
-          <span className={proj.delta > 0 ? "pos" : proj.delta < 0 ? "neg" : "muted"}>{signed(proj.delta)}</span>
+          <span className={proj.delta > 0 ? "gain" : proj.delta < 0 ? "loss" : "muted"}>{signed(proj.delta)}</span>
         </span>
       ) : line ? (
         <span className={styles.slotPower}>

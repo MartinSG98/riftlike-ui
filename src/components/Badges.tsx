@@ -51,7 +51,7 @@ export function PowerBox({
           {line.parts.map((part, i) => (
             <span key={i} className={styles.tipRow}>
               <span>{part.label}</span>
-              <b className={part.kind === "level" ? undefined : part.value >= 0 ? "pos" : "neg"}>
+              <b className={part.kind === "level" ? undefined : part.value >= 0 ? "gain" : "loss"}>
                 {part.kind === "level" ? part.value : signed(part.value)}
               </b>
             </span>
