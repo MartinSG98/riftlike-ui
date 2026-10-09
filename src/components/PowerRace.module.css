@@ -42,11 +42,23 @@
   min-width: 0;
 }
 
-/* The opponent's share is the track, ours fills it from the left. Cross the line to win. */
+.title {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* The opponent's share is the track, ours fills it from the left. The tick marks an even call. */
 .track {
   position: relative;
-  height: 10px;
-  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 20px;
+  border-radius: 10px;
   background: linear-gradient(90deg, color-mix(in srgb, var(--red) 40%, var(--bg-deep)), var(--red));
   overflow: hidden;
 }
@@ -61,13 +73,24 @@
 
 .line {
   position: absolute;
-  top: -2px;
-  bottom: -2px;
+  top: 0;
+  bottom: 0;
   left: 50%;
   width: 2px;
   margin-left: -1px;
   background: var(--gold-bright);
-  opacity: 0.85;
+  opacity: 0.5;
+}
+
+.pctUs,
+.pctThem {
+  position: relative;
+  padding: 0 9px;
+  font-size: 12px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
 }
 
 .verdict {
@@ -75,19 +98,6 @@
   font-size: 13px;
   text-align: center;
   color: var(--text-dim);
-}
-
-.verdict b {
-  font-size: 16px;
-  font-variant-numeric: tabular-nums;
-}
-
-.ahead b {
-  color: var(--green);
-}
-
-.behind b {
-  color: var(--red);
 }
 
 @media (max-width: 640px) {
