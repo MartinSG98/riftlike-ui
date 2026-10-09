@@ -70,6 +70,35 @@
 
 /* ---------- pick slots ---------- */
 
+.pickToolbar {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+/* Shown over the map while a pick is waiting, so the way back is always in reach. */
+.pickBanner {
+  position: sticky;
+  top: 56px;
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--teal);
+  background: color-mix(in srgb, var(--teal-deep) 85%, var(--bg-deep));
+  color: var(--text);
+  font-size: 13.5px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+.pickBanner b {
+  color: var(--teal-bright);
+}
+
 .slotsPanel {
   max-width: 980px;
   margin: 0 auto 18px;
