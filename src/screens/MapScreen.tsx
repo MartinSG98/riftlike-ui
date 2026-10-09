@@ -1,5 +1,6 @@
 import type { ActFn, RunView } from "../api/types";
 import { MapView } from "../components/MapView";
+import { PowerRace } from "../components/PowerRace";
 import { ScoutPanel } from "../components/ScoutPanel";
 import { TeamPanel } from "../components/TeamPanel";
 import { cx } from "../lib/format";
@@ -23,6 +24,7 @@ export function MapScreen({
       </aside>
       <section className={styles.main}>
         <div className={styles.dayLabel}>{run.day_label}</div>
+        {run.opponent && <PowerRace run={run} />}
         {run.map ? (
           <div className={cx("panel", styles.mapPanel)}>
             <MapView run={run} act={act} busy={busy} />

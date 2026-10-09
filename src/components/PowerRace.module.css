@@ -1,0 +1,110 @@
+.race {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+  padding: 12px 16px 10px;
+}
+
+.side {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.side b {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.us {
+  color: var(--teal);
+}
+
+.them {
+  color: var(--red);
+}
+
+.middle {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+}
+
+/* The opponent's share is the track, ours fills it from the left. Cross the line to win. */
+.track {
+  position: relative;
+  height: 10px;
+  border-radius: 5px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--red) 40%, var(--bg-deep)), var(--red));
+  overflow: hidden;
+}
+
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--teal) 40%, var(--bg-deep)), var(--teal));
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.6);
+  transition: width 0.5s ease;
+}
+
+.line {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  left: 50%;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--gold-bright);
+  opacity: 0.85;
+}
+
+.verdict {
+  margin: 0;
+  font-size: 13px;
+  text-align: center;
+  color: var(--text-dim);
+}
+
+.verdict b {
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ahead b {
+  color: var(--green);
+}
+
+.behind b {
+  color: var(--red);
+}
+
+@media (max-width: 640px) {
+  .race {
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+    row-gap: 10px;
+  }
+
+  .middle {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fill {
+    transition: none;
+  }
+}

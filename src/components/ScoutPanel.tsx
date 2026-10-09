@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import type { RunView } from "../api/types";
-import { cx, ROLES, signed } from "../lib/format";
+import { cx, ROLES } from "../lib/format";
 import { useTeam } from "../state/catalog";
 import { PlayerAvatar, PowerBox, TeamBadge } from "./Badges";
 import { ChampCrest } from "./ChampCrest";
@@ -14,13 +14,14 @@ import { SynergyList } from "./SynergyList";
 export function ScoutPanel({ run }: { run: RunView }) {
   const opp = run.opponent!;
   const team = useTeam(opp.code);
-  const diff = run.lineup.total - opp.lineup.total;
   const [scout, setScout] = useState(false);
   return (
     <section className={cx("panel", styles.panel)}>
       <div className={styles.head}>
         <span className="eyebrow">Next opponent</span>
-        <span className={styles.level}>Level {opp.level}</span>
+        <span className={styles.total}>
+          Power <b>{opp.lineup.total}</b>
+        </span>
         <button type="button" className="btn btn-ghost btn-small" onClick={() => setScout(true)}>
           Scout
         </button>
@@ -31,7 +32,7 @@ export function ScoutPanel({ run }: { run: RunView }) {
         <span>
           <b>{team.name}</b>
           <small>
-            {team.league} #{team.seed}
+            {team.league} #{team.seed}, level {opp.level}
           </small>
         </span>
       </div>
@@ -55,15 +56,6 @@ export function ScoutPanel({ run }: { run: RunView }) {
         })}
       </div>
       <SynergyList links={opp.lineup.synergies} tone="them" />
-      <div className={styles.foot}>
-        <span>
-          Their power <b>{opp.lineup.total}</b>
-        </span>
-        <span>
-          Yours <b>{run.lineup.total}</b>{" "}
-          <span className={diff > 0 ? "pos" : diff < 0 ? "neg" : undefined}>({signed(diff)})</span>
-        </span>
-      </div>
     </section>
   );
 }
