@@ -1,17 +1,25 @@
+import { useState } from "react";
+
 import type { Focus, PowerLine } from "../api/types";
+import { logoUrl } from "../lib/art";
 import { capitalize, cx, signed, vars } from "../lib/format";
 import { useTeam } from "../state/catalog";
 import styles from "./Badges.module.css";
 
+/** A team's badge in its color: the logo when public/teams has one, otherwise the tag. */
 export function TeamBadge({ code, size = "md" }: { code: string; size?: "sm" | "md" | "lg" | "xl" }) {
   const team = useTeam(code);
+  const [broken, setBroken] = useState<string | null>(null);
+  const logo = broken !== code;
   return (
     <span
       className={cx(styles.team, styles[size], code.length > 3 && styles.long)}
       style={vars({ "--tc": team.color })}
       title={team.name}
+      role={logo ? "img" : undefined}
+      aria-label={logo ? team.name : undefined}
     >
-      {code}
+      {logo ? <img className={styles.logo} src={logoUrl(code)} alt="" onError={() => setBroken(code)} /> : code}
     </span>
   );
 }

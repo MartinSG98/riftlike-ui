@@ -1,7 +1,7 @@
 # 0006. Official champion art
 
 Date: 2026-10-09
-Status: Accepted, partially supersedes [0002](0002-crests-instead-of-game-art.md) and [0004](0004-a-generated-emblem-per-champion.md)
+Status: Accepted, partially supersedes [0002](0002-crests-instead-of-game-art.md) and [0004](0004-a-generated-emblem-per-champion.md), partially superseded by [0007](0007-team-logos.md)
 
 ## Context
 

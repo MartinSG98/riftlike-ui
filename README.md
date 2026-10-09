@@ -37,6 +37,22 @@ public/champions/
 
 `<id>` is the champion's Data Dragon id, listed in [champion.json](https://ddragon.leagueoflegends.com/cdn/16.20.1/data/en_US/champion.json). Icons are at `https://ddragon.leagueoflegends.com/cdn/16.20.1/img/champion/<id>.png` and splashes at `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/<id>_0.jpg`. The app runs without the folder too, it then draws each champion's generated emblem instead.
 
+### Team logos
+
+Team logos are not in the repo either. They go into `public/teams/`, which git also ignores, as one PNG per team named after its tag:
+
+```
+public/teams/
+  GEN.png  HLE.png  T1.png   DK.png
+  AL.png   BLG.png  TES.png  IG.png
+  G2.png   MKOI.png KC.png
+  TLAW.png LYON.png C9.png
+  TSW.png  CFO.png  MVK.png
+  LOS.png  FUR.png
+```
+
+Versions made for dark backgrounds read best, since the badge behind them is dark. A team without a file keeps its tag on the badge, so any subset works.
+
 ## What is in the app
 
 **The title screen** starts a new run, continues the one in progress, explains the rules in a modal and lists the most recent finished runs. The run in progress is remembered in local storage, so closing the tab loses nothing.
@@ -63,7 +79,7 @@ While a fight or a match plays, a bar with its progress, a 2x speed toggle and a
 
 Dark navy surfaces with gold for titles and highlights, teal for anything you can act on and red for the opponent. The tokens live once in [src/styles/tokens.css](src/styles/tokens.css) as CSS custom properties. Every color comes from there. Components mix their tints, glows and button fills from the tokens with `color-mix()`, so a new palette is a change to that one file. Cinzel, loaded from Google Fonts, carries the display type, and Barlow carries the interface.
 
-Champions use the official art from Data Dragon. Crests show the square portrait, ringed in the color of the champion's early, mid or late focus, and card banners show the splash. If an image is missing, the champion falls back to an abstract emblem generated from its name. Teams are their tag on a badge in the team color. The reasoning is in [ADR 0006](docs/adr/0006-official-champion-art.md), which replaces the art-free crests of [ADR 0002](docs/adr/0002-crests-instead-of-game-art.md) and [ADR 0004](docs/adr/0004-a-generated-emblem-per-champion.md).
+Champions use the official art from Data Dragon. Crests show the square portrait, ringed in the color of the champion's early, mid or late focus, and card banners show the splash. If an image is missing, the champion falls back to an abstract emblem generated from its name. Teams show their logo on a badge in the team color, or their tag when the logo file is missing. The reasoning is in [ADR 0006](docs/adr/0006-official-champion-art.md) and [ADR 0007](docs/adr/0007-team-logos.md), which replaces the art-free crests of [ADR 0002](docs/adr/0002-crests-instead-of-game-art.md) and [ADR 0004](docs/adr/0004-a-generated-emblem-per-champion.md).
 
 Fight and match playback runs on a timeline of beats built from the result, see [ADR 0005](docs/adr/0005-step-by-step-playback-on-a-timeline.md). Effects are short CSS animations that play when their beat arrives, and reduced motion settings turn them off.
 
