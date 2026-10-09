@@ -3,7 +3,13 @@
   font-weight: 900;
   text-transform: uppercase;
   line-height: 1;
-  background: linear-gradient(180deg, #fff6dc 0%, var(--gold-bright) 38%, var(--gold) 62%, var(--gold-deep) 100%);
+  background: linear-gradient(
+    180deg,
+    var(--gold-pale) 0%,
+    var(--gold-bright) 38%,
+    var(--gold) 62%,
+    var(--gold-deep) 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

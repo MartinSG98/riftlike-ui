@@ -59,7 +59,7 @@
   transform: translateX(-50%);
   padding: 0 3px;
   border-radius: 2px;
-  background: rgba(3, 7, 12, 0.72);
+  background: color-mix(in srgb, var(--bg-deep) 72%, transparent);
   font-family: var(--font-ui);
   font-weight: 800;
   letter-spacing: 0.04em;
