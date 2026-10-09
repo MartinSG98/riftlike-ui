@@ -89,3 +89,31 @@ export function laneStates(r: MatchResult, beats: MatchBeat[], index: number): R
   }
   return out;
 }
+
+export interface LaneStory {
+  beat: string[]; // the champions this lane knocked out, in order
+  fellTo: string | null;
+  tiedWith: string | null;
+}
+
+/** What each lane did over the whole match, for the end screen. */
+export function laneStories(r: MatchResult): Record<Side, LaneStory[]> {
+  const make = (lanes: LaneSide[]) => lanes.map((): LaneStory => ({ beat: [], fellTo: null, tiedWith: null }));
+  const out: Record<Side, LaneStory[]> = { us: make(r.ours), them: make(r.theirs) };
+  const name = (lane: LaneSide) => lane.champ ?? "an empty lane";
+  for (const s of r.steps) {
+    const a = name(r.ours[s.ours]);
+    const b = name(r.theirs[s.theirs]);
+    if (s.winner === "us") {
+      out.us[s.ours].beat.push(b);
+      out.them[s.theirs].fellTo = a;
+    } else if (s.winner === "them") {
+      out.them[s.theirs].beat.push(a);
+      out.us[s.ours].fellTo = b;
+    } else {
+      out.us[s.ours].tiedWith = b;
+      out.them[s.theirs].tiedWith = a;
+    }
+  }
+  return out;
+}
