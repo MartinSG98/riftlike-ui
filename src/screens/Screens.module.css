@@ -52,7 +52,7 @@
 .mapPanel {
   padding: 8px 12px 18px;
   background:
-    radial-gradient(ellipse at 50% 0%, rgba(63, 212, 200, 0.06), transparent 60%),
+    radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--teal) 6%, transparent), transparent 60%),
     linear-gradient(180deg, var(--surface-2), var(--surface));
 }
 
@@ -110,7 +110,7 @@
 
 .placing {
   border-color: var(--teal);
-  box-shadow: 0 0 30px rgba(63, 212, 200, 0.15);
+  box-shadow: 0 0 30px color-mix(in srgb, var(--teal) 15%, transparent);
 }
 
 .slotsHead {
@@ -189,7 +189,7 @@
   padding: 0 7px;
   border-radius: 2px;
   background: var(--teal);
-  color: #03201f;
+  color: var(--teal-ink);
   font-size: 10px;
   font-weight: 800;
   line-height: 17px;
@@ -262,7 +262,7 @@
   display: block;
   margin: 0 auto 10px;
   color: var(--gold);
-  filter: drop-shadow(0 0 22px rgba(200, 165, 92, 0.45));
+  filter: drop-shadow(0 0 22px color-mix(in srgb, var(--gold) 45%, transparent));
 }
 
 .endTitle {
@@ -271,7 +271,7 @@
 }
 
 .gold {
-  background: linear-gradient(180deg, #fff6dc, var(--gold) 60%, var(--gold-deep));
+  background: linear-gradient(180deg, var(--gold-pale), var(--gold) 60%, var(--gold-deep));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

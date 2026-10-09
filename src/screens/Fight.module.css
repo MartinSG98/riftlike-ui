@@ -122,13 +122,13 @@
   height: 22px;
   border: 1px solid var(--line-strong);
   border-radius: 2px;
-  background: linear-gradient(90deg, #5a1a26, var(--red));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--red) 38%, var(--bg-deep)), var(--red));
 }
 
 .barUs {
   position: absolute;
   inset: 0 auto 0 0;
-  background: linear-gradient(90deg, #0f5958, var(--teal));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--teal) 40%, var(--bg-deep)), var(--teal));
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.6);
   transition: width 1s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -144,7 +144,7 @@
   background: #fff;
   box-shadow:
     0 0 12px 3px rgba(255, 255, 255, 0.7),
-    0 0 28px 10px rgba(200, 165, 92, 0.45);
+    0 0 28px 10px color-mix(in srgb, var(--gold) 45%, transparent);
   opacity: 0;
   animation: spark 0.8s ease-out 0.8s forwards;
 }
@@ -203,7 +203,7 @@
 }
 
 .laneFocus {
-  background: rgba(200, 165, 92, 0.06);
+  background: color-mix(in srgb, var(--gold) 6%, transparent);
 }
 
 .laneRole {
@@ -284,7 +284,7 @@
   border-color: var(--gold);
   box-shadow:
     0 0 0 1px var(--gold),
-    0 0 22px rgba(200, 165, 92, 0.3);
+    0 0 22px color-mix(in srgb, var(--gold) 30%, transparent);
 }
 
 .fallen {
@@ -353,7 +353,7 @@
   padding: 1px 6px;
   border: 1px solid var(--gold-deep);
   border-radius: 2px;
-  background: rgba(200, 165, 92, 0.1);
+  background: color-mix(in srgb, var(--gold) 10%, transparent);
   font-size: 11px;
   font-weight: 700;
   color: var(--gold-bright);
@@ -362,8 +362,8 @@
 
 .chipNeg {
   border-color: var(--red);
-  background: rgba(229, 72, 94, 0.1);
-  color: #ffc5cd;
+  background: color-mix(in srgb, var(--red) 10%, transparent);
+  color: var(--red-pale);
 }
 
 .chipCounter {
@@ -386,7 +386,7 @@
   border-radius: 2px;
   box-shadow:
     inset 0 0 0 1px var(--gold-bright),
-    0 0 20px rgba(240, 219, 162, 0.5);
+    0 0 20px color-mix(in srgb, var(--gold-bright) 50%, transparent);
   opacity: 0;
   pointer-events: none;
   animation: flash 0.7s ease-out 0.25s;
@@ -403,7 +403,7 @@
   top: 0;
   font-size: 16px;
   font-weight: 900;
-  color: #ff8394;
+  color: var(--red-bright);
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
   opacity: 0;
   pointer-events: none;
@@ -445,7 +445,7 @@
   overflow-y: auto;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: rgba(3, 7, 12, 0.6);
+  background: color-mix(in srgb, var(--bg-deep) 60%, transparent);
   list-style: none;
   font-size: 13.5px;
   line-height: 1.45;
@@ -496,7 +496,7 @@
   line-height: 1;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  background: linear-gradient(180deg, #fff6dc, var(--gold) 60%, var(--gold-deep));
+  background: linear-gradient(180deg, var(--gold-pale), var(--gold) 60%, var(--gold-deep));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -504,7 +504,7 @@
 
 .loss,
 .forfeit {
-  background: linear-gradient(180deg, #ffd5db, var(--red) 60%, #6b1422);
+  background: linear-gradient(180deg, var(--red-pale), var(--red) 60%, color-mix(in srgb, var(--red) 45%, #000));
   -webkit-background-clip: text;
   background-clip: text;
 }

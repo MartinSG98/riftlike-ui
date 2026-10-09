@@ -81,7 +81,7 @@
   padding: 0 3px;
   border-radius: 3px;
   background: var(--gold);
-  color: #1c1406;
+  color: var(--gold-ink);
   font-size: 9px;
   font-weight: 800;
   line-height: 14px;

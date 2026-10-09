@@ -1,4 +1,11 @@
-/* Design tokens. Components style against these variables, never raw hex. */
+/*
+  Design tokens. Every color in the app comes from this file, so a new palette is a
+  change here and nowhere else. The modules mix their tints, glows and button fills
+  from these tokens with color-mix(), which means those follow the palette too. The
+  only raw colors left in the modules are neutral black for shadows and white for
+  faint highlights. Fonts are loaded in index.html, so a new font family also needs
+  its Google Fonts link changed there.
+*/
 
 :root {
   /* Surfaces */
@@ -9,6 +16,8 @@
   --surface-3: #142638;
   --line: #1c3045;
   --line-strong: #2a4762;
+  --bg-glow: #10263a;
+  --bg-glow-2: #0a1b28;
 
   /* Text */
   --text: #ece5d3;
@@ -19,10 +28,15 @@
   --gold: #c8a55c;
   --gold-bright: #f0dba2;
   --gold-deep: #7d5f26;
+  --gold-pale: #fff6dc;
+  --gold-ink: #1c1406; /* text on a gold fill */
   --teal: #3fd4c8;
   --teal-bright: #8ff0e8;
   --teal-deep: #0e3f40;
+  --teal-ink: #03201f; /* text on a teal fill */
   --red: #e5485e;
+  --red-bright: #ff8394;
+  --red-pale: #ffd2d8; /* text on a red-deep fill */
   --red-deep: #3d1219;
   --green: #4ed39a;
 

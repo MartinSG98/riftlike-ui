@@ -21,7 +21,7 @@
   border-color: var(--teal);
   box-shadow:
     0 0 0 1px var(--teal),
-    0 0 26px rgba(63, 212, 200, 0.25);
+    0 0 26px color-mix(in srgb, var(--teal) 25%, transparent);
 }
 
 .level {
@@ -31,7 +31,7 @@
   padding: 2px 8px;
   border: 1px solid var(--line-strong);
   border-radius: 2px;
-  background: rgba(3, 7, 12, 0.8);
+  background: color-mix(in srgb, var(--bg-deep) 80%, transparent);
   font-size: 11.5px;
   font-weight: 800;
 }

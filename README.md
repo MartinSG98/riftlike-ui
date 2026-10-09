@@ -61,7 +61,7 @@ While a fight or a match plays, a bar with its progress, a 2x speed toggle and a
 
 ## Design
 
-Dark navy surfaces with gold for titles and highlights, teal for anything you can act on and red for the opponent. The tokens live once in [src/styles/tokens.css](src/styles/tokens.css) as CSS custom properties, and components never use raw hex values. Cinzel, loaded from Google Fonts, carries the display type, and Barlow carries the interface.
+Dark navy surfaces with gold for titles and highlights, teal for anything you can act on and red for the opponent. The tokens live once in [src/styles/tokens.css](src/styles/tokens.css) as CSS custom properties. Every color comes from there. Components mix their tints, glows and button fills from the tokens with `color-mix()`, so a new palette is a change to that one file. Cinzel, loaded from Google Fonts, carries the display type, and Barlow carries the interface.
 
 Champions use the official art from Data Dragon. Crests show the square portrait, ringed in the color of the champion's early, mid or late focus, and card banners show the splash. If an image is missing, the champion falls back to an abstract emblem generated from its name. Teams are their tag on a badge in the team color. The reasoning is in [ADR 0006](docs/adr/0006-official-champion-art.md), which replaces the art-free crests of [ADR 0002](docs/adr/0002-crests-instead-of-game-art.md) and [ADR 0004](docs/adr/0004-a-generated-emblem-per-champion.md).
 

@@ -125,8 +125,8 @@
 .node.open {
   border: 2px solid var(--teal);
   box-shadow:
-    0 0 0 4px rgba(63, 212, 200, 0.14),
-    0 0 18px rgba(63, 212, 200, 0.4);
+    0 0 0 4px color-mix(in srgb, var(--teal) 14%, transparent),
+    0 0 18px color-mix(in srgb, var(--teal) 40%, transparent);
   cursor: pointer;
   transform: translate(-50%, -50%) scale(1.06);
   animation: pulse 1.8s ease-in-out infinite;
@@ -143,14 +143,14 @@
 /* Where you stand. */
 .node.here {
   border: 2px solid var(--gold);
-  background: radial-gradient(circle, rgba(200, 165, 92, 0.28), var(--bg-deep) 72%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--gold) 28%, transparent), var(--bg-deep) 72%);
   animation: here 2s ease-in-out infinite;
 }
 
 /* Already walked. */
 .node.visited {
   border-color: var(--gold-deep);
-  background: radial-gradient(circle, rgba(200, 165, 92, 0.16), var(--bg-deep) 72%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--gold) 16%, transparent), var(--bg-deep) 72%);
 }
 
 .node.visited .fightCrest,
@@ -184,7 +184,7 @@
   padding: 0 6px;
   border-radius: 2px;
   background: var(--gold);
-  color: #1c1406;
+  color: var(--gold-ink);
   font-size: 9.5px;
   font-weight: 800;
   line-height: 15px;
@@ -203,7 +203,7 @@
   height: 17px;
   border-radius: 50%;
   background: var(--gold);
-  color: #1c1406;
+  color: var(--gold-ink);
   font-size: 10px;
   font-weight: 900;
 }
@@ -245,7 +245,7 @@
 .enemyBadge {
   background: var(--red-deep);
   border: 1px solid var(--red);
-  color: #ffd9de;
+  color: var(--red-pale);
 }
 
 .caption {
@@ -272,36 +272,36 @@
 .match.open {
   border-color: var(--red);
   box-shadow:
-    0 0 0 5px rgba(229, 72, 94, 0.14),
-    0 0 22px rgba(229, 72, 94, 0.4);
+    0 0 0 5px color-mix(in srgb, var(--red) 14%, transparent),
+    0 0 22px color-mix(in srgb, var(--red) 40%, transparent);
   animation: pulseRed 1.8s ease-in-out infinite;
 }
 
 @keyframes pulse {
   50% {
     box-shadow:
-      0 0 0 8px rgba(63, 212, 200, 0.08),
-      0 0 28px rgba(63, 212, 200, 0.5);
+      0 0 0 8px color-mix(in srgb, var(--teal) 8%, transparent),
+      0 0 28px color-mix(in srgb, var(--teal) 50%, transparent);
   }
 }
 
 @keyframes pulseRed {
   50% {
     box-shadow:
-      0 0 0 8px rgba(229, 72, 94, 0.08),
-      0 0 28px rgba(229, 72, 94, 0.5);
+      0 0 0 8px color-mix(in srgb, var(--red) 8%, transparent),
+      0 0 28px color-mix(in srgb, var(--red) 50%, transparent);
   }
 }
 
 @keyframes here {
   0%,
   100% {
-    box-shadow: 0 0 0 3px rgba(200, 165, 92, 0.2);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 20%, transparent);
   }
   50% {
     box-shadow:
-      0 0 0 7px rgba(200, 165, 92, 0.1),
-      0 0 20px rgba(200, 165, 92, 0.35);
+      0 0 0 7px color-mix(in srgb, var(--gold) 10%, transparent),
+      0 0 20px color-mix(in srgb, var(--gold) 35%, transparent);
   }
 }
 
@@ -336,12 +336,12 @@
 
 .swHere {
   border-color: var(--gold);
-  box-shadow: 0 0 6px rgba(200, 165, 92, 0.6);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--gold) 60%, transparent);
 }
 
 .swOpen {
   border-color: var(--teal);
-  box-shadow: 0 0 6px rgba(63, 212, 200, 0.6);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--teal) 60%, transparent);
 }
 
 .swVisited {
