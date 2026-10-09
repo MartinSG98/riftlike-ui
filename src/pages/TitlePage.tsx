@@ -7,7 +7,7 @@ import { TeamBadge } from "../components/Badges";
 import { HowToPlay } from "../components/HowToPlay";
 import { TrophyIcon } from "../components/Icons";
 import { Wordmark } from "../components/Wordmark";
-import { cx } from "../lib/format";
+import { cx, STAGE_NAMES, STAGES } from "../lib/format";
 import { clearSavedRunId, getSavedRunId } from "../lib/savedRun";
 import { useCatalog } from "../state/catalog";
 import styles from "./Pages.module.css";
@@ -65,13 +65,9 @@ export function TitlePage() {
         {recent.length > 0 && (
           <section className={styles.recent}>
             <p className="eyebrow">Recent runs</p>
-            <ul>
+            <ul className={styles.runCards}>
               {recent.map((r) => (
-                <li key={r.id}>
-                  <TeamBadge code={r.team} size="sm" />
-                  <span>{teamName(r.team)}</span>
-                  <b className={r.result === "champion" ? styles.won : undefined}>{r.label}</b>
-                </li>
+                <RecentRun key={r.id} run={r} name={teamName(r.team)} />
               ))}
             </ul>
           </section>
@@ -84,5 +80,38 @@ export function TitlePage() {
       </div>
       {help && <HowToPlay onClose={() => setHelp(false)} />}
     </main>
+  );
+}
+
+/** A finished run as a small card, with a track of the stages it got through. */
+function RecentRun({ run, name }: { run: RunSummary; name: string }) {
+  const { teams } = useCatalog();
+  const playIn = teams.find((t) => t.code === run.team)?.play_in ?? false;
+  const champion = run.result === "champion";
+  const reached = STAGES.indexOf(run.stage);
+  return (
+    <li className={cx(styles.runCard, champion && styles.runChampion)}>
+      <span className={styles.runHead}>
+        <TeamBadge code={run.team} size="sm" />
+        <b>{name}</b>
+      </span>
+      <ol className={styles.runTrack} aria-hidden="true">
+        {STAGES.map((stage, i) => (
+          <li
+            key={stage}
+            title={STAGE_NAMES[stage]}
+            className={cx(
+              styles.pip,
+              stage === "playin" && !playIn
+                ? styles.pipSkip
+                : i < reached
+                  ? styles.pipDone
+                  : i === reached && (champion ? styles.pipWon : styles.pipOut),
+            )}
+          />
+        ))}
+      </ol>
+      <span className={styles.runLabel}>{run.label}</span>
+    </li>
   );
 }

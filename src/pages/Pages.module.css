@@ -58,37 +58,93 @@
 }
 
 .recent {
-  width: min(520px, 100%);
-  margin: 36px auto 0;
+  width: min(780px, 100%);
+  margin: 40px auto 0;
+}
+
+/* ---------- recent runs: one card each, with how far it got ---------- */
+
+.runCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
   text-align: left;
 }
 
-.recent ul {
+.runCard {
   display: grid;
-  gap: 4px;
-  margin: 10px 0 0;
+  align-content: start;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--bg-deep) 60%, transparent);
+}
+
+.runChampion {
+  border-color: var(--gold);
+  background:
+    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--gold) 18%, transparent), transparent 70%),
+    color-mix(in srgb, var(--bg-deep) 60%, transparent);
+}
+
+.runHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.runHead b {
+  overflow: hidden;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.runTrack {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 3px;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.recent li {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 10px;
-  padding: 6px 10px;
-  border: 1px solid var(--line);
-  border-radius: 2px;
-  background: color-mix(in srgb, var(--bg-deep) 60%, transparent);
-  font-size: 13px;
+.pip {
+  height: 5px;
+  border-radius: 3px;
+  background: var(--line);
 }
 
-.recent li b {
-  font-weight: 600;
+.pipSkip {
+  opacity: 0.35;
+}
+
+.pipDone {
+  background: var(--teal);
+}
+
+.pipOut {
+  background: var(--red);
+}
+
+.pipWon {
+  background: var(--gold);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--gold) 60%, transparent);
+}
+
+.runLabel {
+  font-size: 12px;
+  line-height: 1.3;
   color: var(--text-muted);
 }
 
-.recent li b.won {
+.runChampion .runLabel {
+  font-weight: 700;
   color: var(--gold);
 }
 
@@ -121,7 +177,10 @@
 }
 
 .leagueHead b {
-  font-size: 15px;
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: 0.06em;
+  color: var(--gold-bright);
 }
 
 .leagueHead span {
@@ -171,6 +230,19 @@
   }
 }
 
+/* The seed, large, in the team's color. */
+.seedMark {
+  position: absolute;
+  top: 4px;
+  left: 8px;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1;
+  color: color-mix(in srgb, var(--tc) 75%, var(--text));
+  opacity: 0.9;
+}
+
 .teamName {
   font-size: 13.5px;
   font-weight: 700;
@@ -194,6 +266,54 @@
   font-size: 10px;
   font-weight: 800;
   line-height: 16px;
+}
+
+/* ---------- the road under the team grid ---------- */
+
+.road {
+  margin-top: 44px;
+}
+
+.road ol {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 10px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: road;
+}
+
+.road li {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-top: 2px solid var(--gold-deep);
+  border-radius: var(--radius);
+  background: var(--surface);
+  counter-increment: road;
+}
+
+.road li:last-child {
+  border-top-color: var(--gold);
+}
+
+.road b {
+  font-size: 13.5px;
+}
+
+.road b::before {
+  content: counter(road) ". ";
+  color: var(--gold);
+}
+
+.road span {
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--text-muted);
 }
 
 .error {
