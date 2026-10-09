@@ -14,7 +14,10 @@ function fanVote(ours: number, theirs: number): number {
   return Math.min(99, Math.max(1, Math.round(odds * 100)));
 }
 
-/** Your total against the next opponent's, across the top of the match day, as a fan vote. */
+/**
+ * Your total against the next opponent's, across the top of the match day, as a fan vote. Only the
+ * percentages show, since the totals would read like a promise the counters can break.
+ */
 export function PowerRace({ run }: { run: RunView }) {
   const opp = run.opponent!;
   const us = useTeam(run.team);
@@ -30,7 +33,6 @@ export function PowerRace({ run }: { run: RunView }) {
       <span className={styles.side}>
         <TeamBadge code={us.code} size="sm" />
         <span className={styles.label}>You</span>
-        <b className={styles.us}>{ours}</b>
       </span>
 
       <div className={styles.middle}>
@@ -45,7 +47,6 @@ export function PowerRace({ run }: { run: RunView }) {
       </div>
 
       <span className={cx(styles.side, styles.right)}>
-        <b className={styles.them}>{theirs}</b>
         <span className={styles.label}>Them</span>
         <TeamBadge code={them.code} size="sm" />
       </span>

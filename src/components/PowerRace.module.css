@@ -21,21 +21,6 @@
   color: var(--text-muted);
 }
 
-.side b {
-  font-size: 26px;
-  font-weight: 800;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-
-.us {
-  color: var(--teal);
-}
-
-.them {
-  color: var(--red);
-}
-
 .middle {
   display: grid;
   gap: 7px;
