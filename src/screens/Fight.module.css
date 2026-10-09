@@ -552,6 +552,10 @@
   color: var(--text);
 }
 
+.reason b {
+  font-variant-numeric: tabular-nums;
+}
+
 .gain {
   color: var(--green);
 }

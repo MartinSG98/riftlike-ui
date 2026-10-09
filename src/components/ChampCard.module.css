@@ -78,6 +78,7 @@
   font-weight: 800;
   line-height: 0.95;
   color: var(--text);
+  font-variant-numeric: tabular-nums;
 }
 
 .headCaption {
@@ -104,6 +105,7 @@
 .gainRow b {
   font-size: 22px;
   font-weight: 800;
+  font-variant-numeric: tabular-nums;
 }
 
 .gain {
